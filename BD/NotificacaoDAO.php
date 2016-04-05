@@ -68,9 +68,11 @@ class NotificacaoDAO extends DAO {
         $this->executaSQL($sql);
     }
 
-    public function getNotificacoes($idUsuario, $limiteInicio = 0, $limiteFim = 10){
-        $sql = "Select * from notificacoes where IdUsuario='$idUsuario' LIMIT $limiteInicio , $limiteFim";  
-        //$sql = "Select * from notificacoes  LIMIT $limiteInicio , $limiteFim";  
+    public function getNotificacoes($idUsuario, $limiteInicio = -1, $limiteFim = -1) {
+        $sql = "Select * from notificacoes where IdUsuario='$idUsuario'";
+        if ($limiteInicio >= 0 && $limiteFim >= 0) {
+            $sql .= " LIMIT $limiteInicio , $limiteFim";
+        }
         $rs = $this->executaSQL($sql);
         $notificacoes = array();
         while ($reg = mysqli_fetch_assoc($rs)) {
@@ -78,5 +80,15 @@ class NotificacaoDAO extends DAO {
             array_push($notificacoes, $notificacao);
         }
         return $notificacoes;
+    }
+    
+    public function getQuantidadeNotificacoesNaoVisualizadas($idUsuario) {
+        $sql = "Select count(*) as Quantidade from notificacoes where IdUsuario='$idUsuario' and Visualizada='false'";
+        $rs = $this->executaSQL($sql);
+        $notificacoes = array();
+        if ($reg = mysqli_fetch_assoc($rs)) {
+            return $reg['Quantidade'];
+        }
+        return 0;
     }
 }

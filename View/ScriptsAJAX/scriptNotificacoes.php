@@ -1,6 +1,5 @@
 <?php
 
-
 if (isset($_GET['idUsuario'])) {
     include "../../scriptRequires.php";
     $idUsuario = $_GET['idUsuario'];
@@ -8,8 +7,15 @@ if (isset($_GET['idUsuario'])) {
     $limiteFim = $_GET['limiteFim'];
     $notificacaoDAO = new NotificacaoDAO();
     $notificacoes = $notificacaoDAO->getNotificacoes($idUsuario, $limiteInicio, $limiteFim);
+    $qtdNotificacoesNaoVisualizadas = 0;
+    echo "<ul>";
     foreach ($notificacoes as $notificacao) {
-        echo $notificacao->getMensagem() . "<br/>";
+        echo "<li>" . $notificacao->getMensagem() . "</li>";
+        if (!$notificacao->isVisualizada()) {
+            $qtdNotificacoesNaoVisualizadas++;
+        }
     }
+    echo "<li id='qtdNotificacaoNaoVisualizadas'>" . $qtdNotificacoesNaoVisualizadas . "</li>";
+    echo "</ul>";
 }
 ?>
