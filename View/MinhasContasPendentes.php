@@ -35,6 +35,7 @@ foreach ($contasAReceber as $conta) {
 ?>
 <html>
     <head>
+        <meta charset="UTF-8">
         <script src="./lib/js/jquery.min.js"></script> 
         <script src="./lib/js/chartphp.js"></script> 
         <link rel="stylesheet" href="./lib/js/chartphp.css"> 

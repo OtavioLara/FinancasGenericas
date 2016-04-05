@@ -216,6 +216,7 @@ class ContaDAO extends DAO {
     private function getContaReg($reg) {
         $idConta = $reg['Id'];
         $nome = $reg['Nome'];
+        $descricaoAdicional = $reg['DescricaoAdicional'];
         $valorTotal = $reg['ValorTotal'];
         $data = new DateTime($reg['Data']);
 
@@ -223,22 +224,24 @@ class ContaDAO extends DAO {
         $republicaDAO = new RepublicaDAO($this->conexao);
         $integrantes = $this->getIntegrantesConta($idConta);
         $republica = $republicaDAO->getRepublicaPorId_Incompleto($reg['IdRepublica']);
-        return new Conta($nome, $valorTotal, null, $integrantes, $republica, $data, $idConta);
+        return new Conta($nome, $descricaoAdicional, $valorTotal, $data, $integrantes, null, $republica, $idConta);
     }
 
     private function geraSQLInserirConta(Conta $conta) {
         $nome = mysql_real_escape_string($conta->getNome());
+        $descricao = mysql_real_escape_string($conta->getDescricaoAdicional());
         $sql = "";
         if ($conta->getId() >= 0) {
-            $sql = "Insert into conta (Data,Id,Nome, ValorTotal, IdRepublica) values (";
+            $sql = "Insert into conta (Data,Id,Nome, DescricaoAdicional, ValorTotal, IdRepublica) values (";
             $sql = $sql . "'" . $conta->getData()->format('Y-m-d H:i:s') . "',";
             $sql = $sql . "'" . $conta->getId() . "',";
         } else {
             date_default_timezone_set('America/Sao_Paulo');
-            $sql = "Insert into conta (Data,Nome, ValorTotal, IdRepublica) values (";
+            $sql = "Insert into conta (Data,Nome, DescricaoAdicional, ValorTotal, IdRepublica) values (";
             $sql = $sql . "'" . date('Y-m-d H:i:s') . "',";
         }
         $sql = $sql . "'" . $nome . "',";
+        $sql = $sql . "'" . $descricao . "',";
         $sql = $sql . "'" . $conta->getValorTotal() . "',";
         $sql = $sql . "'" . $conta->getRepublica()->getId() . "')";
         return $sql;
@@ -273,7 +276,10 @@ class ContaDAO extends DAO {
             $nome = $reg['Nome'];
             $valorTotal = $reg['ValorTotal'];
             $data = new DateTime($reg['Data']);
-            return new Conta($nome, $valorTotal, null, null, null, $data, $idConta);
+            $descricaoAdicional = new DateTime($reg['DescricaoAdicional']);
+            $conta = new Conta($nome, $descricaoAdicional, $valorTotal, $data);
+            $conta->setId($idConta);
+            return $conta;
         }
         return null;
     }

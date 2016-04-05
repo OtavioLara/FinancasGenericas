@@ -38,6 +38,9 @@ $arrayJavaScriptNome = substr($arrayJavaScriptNome, 0, -1);
     </head>
     <form action="ControlesScript/ControleContaScript.php" method="post">
         NomeConta: <input type="text" id="nomeConta" name="nomeConta" />
+        <br/>
+        Descrição adicional: 
+        <br/><textarea name="descricaoAdicional" rows="4" cols="50"></textarea><br/>
         <h2>Quem pagou a conta?</h2>
         Nome: <input type="text" id="nomeProp" onclick="showModalProp()" autocomplete='off'/> Valor: <input type="text" id="valorProp" size="2" autocomplete='off'/>
         <input type="hidden" id="idProp" />

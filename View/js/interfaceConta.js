@@ -27,7 +27,7 @@ function adicionaProprietario() {
     var tfValor = "<input type='text' value='" + inputValor.value + "' name='valorProp[]' autocomplete='off' />";
     var tfId = "<input type='hidden' value='" + inputId.value + "' name='idProp[]' />";
     var btRemover = "<button type='button' onclick='removeLinha(this)'>remover</button>";
-    
+
     /* Insere campos criados na tabela */
     var row = tabela.insertRow(1);
     var cell1 = row.insertCell(0);
@@ -131,7 +131,7 @@ function geraConteudoModalDistribuicao(linhaItem) {
     }
 
     if (listaCheckbox != "") {
-        var tfLinhaItem = "<input type='hidden' value='"+linhaItem+"' id='linhaItem' />";
+        var tfLinhaItem = "<input type='hidden' value='" + linhaItem + "' id='linhaItem' />";
         div.innerHTML = tfLinhaItem + listaCheckbox;
         $('#modalDistribuicao').modal("show");
     }
@@ -141,7 +141,7 @@ function modalDistribuicaoClick() {
     var div = document.getElementById("modalDistribuicao");
     var checkSelected = div.querySelectorAll("input[name='integrantes']:checked");
     var linhaItem = parseInt(document.getElementById("linhaItem").value);
-    
+
     /* Adiciona todos os checkbox selecionados na distribuição */
     for (var i = 0; i < checkSelected.length; i++) {
         var values = checkSelected[i].value.split(";");
@@ -161,7 +161,7 @@ function adicionarDistribuicao(linhaItem, idIntegrante, nomeIntegrante) {
     var tfIdIntegrante = "<input type='text' value='" + idIntegrante + "' name='idDistribuicaoItem[]' />";
     var tfDistribuicao = "<input type='text' value='0' name='valorDistribuicaoItem[]' autocomplete='off' />";
     var btRemove = "<button type='button' onclick='removerDistribuicao(this.parentNode)' >remover </button>";
-    
+
     /* Adiciona campos */
     li.innerHTML = nomeIntegrante + tfDistribuicao + btRemove + tfIdIntegrante;
     lista.appendChild(li);
@@ -194,17 +194,17 @@ function check() {
     var erro = false;
     var valorTotal = 0;
 
-    
+
     if (document.getElementById("nomeConta").value == '') {
         alert('O campo "nome conta" está em branco.');
         erro = true;
     }
-    
+
     if (document.getElementById("tabelaProp").rows.length == 1) {
         alert('Adiciona algum proprietário(dono) à conta.');
         erro = true;
     }
-    
+
     for (var i = 0; i < inputValorItem.length; i++) {
         var valorDistribuicaoItem = listaDistribuicao[i].querySelectorAll("input[name='valorDistribuicaoItem[]']");
         var valorTotalDistribuicao = 0;
@@ -227,13 +227,13 @@ function check() {
         valorTotal += numeroControle(inputValorItem[i].value);
         valorTotal = parseFloat(valorTotal.toFixed(2));
     }
-    
+
     var valorPropTotal = somaValores(valorProp);
     if (valorTotal != valorPropTotal) {
         alert('Valor Prop: ' + valorPropTotal + " Valor Total Itens: " + valorTotal);
         erro = true;
     }
-    
+
     return !erro;
 
 }
@@ -245,13 +245,13 @@ function setInputsPagar() {
     var radioSelected = div.querySelectorAll("input[name='integrantes[]']:checked");
     var inputIdPagador = document.getElementById("idPagador");
     var inputValorPago = document.getElementById("valorPago");
-    
+
     var values = radioSelected[0].value.split(";");
     var idPagador = values[0];
     var valorDivida = numeroControle(values[1]);
     var valorPago = numeroControle(inputValorPago.value);
     inputIdPagador.value = values[0];
-    
+
     if (valorPago >= valorDivida) {
         inputValorPago.value = numeroInterface(valorDivida);
     }

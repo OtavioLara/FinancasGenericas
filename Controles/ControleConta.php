@@ -16,6 +16,7 @@ class ControleConta extends Controle {
         $contaBuilder->setValorIntegranteItens($params['valorDistribuicaoItem']);
         $contaBuilder->setValoresProprietarios($params['valorProp']);
         $contaBuilder->setValoresItens($params['valorItem']);
+        $contaBuilder->setDescricaoAdicional($params['descricaoAdicional']);
         return $contaBuilder->gerarConta();
     }
 

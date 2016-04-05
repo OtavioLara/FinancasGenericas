@@ -72,6 +72,9 @@ $arrayJavaScriptNome = substr($arrayJavaScriptNome, 0, -1);
 
     <form action="ControlesScript/ControleContaScript.php" method="post">
         Nome Conta: <?php echo "<input type='text' value='" . $conta->getNome() . "'  id='nomeConta' name='nomeConta' autocomplete='off' />"; ?> <br/>
+        <br/>
+        Descrição adicional: 
+        <br/><textarea name="descricaoAdicional" rows="4" cols="50"><?php echo $conta->getDescricaoAdicional(); ?></textarea><br/>
         <table width="30%" border="1" id="tabelaProp">
             <th> Nome Dono </th>
             <th> Valor </th>
@@ -169,7 +172,7 @@ $arrayJavaScriptNome = substr($arrayJavaScriptNome, 0, -1);
                             $id = $integrante->getUsuario()->getId();
                             $valor = $formato->numeroInterface($integrante->getValorAPagar());
                             echo "<input type='radio' value='$id;$valor' name ='integrantes[]' /> "
-                            . $integrante->getUsuario()->getNome() . "(".$valor.")<br/>";
+                            . $integrante->getUsuario()->getNome() . "(" . $valor . ")<br/>";
                         }
                     }
                     ?>

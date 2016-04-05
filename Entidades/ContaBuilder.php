@@ -1,4 +1,5 @@
 <?php
+
 class ContaBuilder {
 
     private $nomeConta; //nome da conta
@@ -9,6 +10,7 @@ class ContaBuilder {
     private $valorIntegranteItens; //valores da distribuicao
     private $idsIntegrantes; //ids das distribuicoes
     private $contadorIntegrantes; //contador para saber onde cada integrante vai ficar
+    private $descricaoAdicional;
     private $formato;
 
     function __construct() {
@@ -54,6 +56,10 @@ class ContaBuilder {
 
     public function setContadorIntegrantes($contadorIntegrantes) {
         $this->contadorIntegrantes = $contadorIntegrantes;
+    }
+
+    public function setDescricaoAdicional($descricaoAdicional) {
+        $this->descricaoAdicional = $descricaoAdicional;
     }
 
     public function gerarConta() {
@@ -108,8 +114,9 @@ class ContaBuilder {
                 $integrante->setValores(0);
             }
         }
-
-        return new Conta($this->nomeConta, $valorTotal, $itens, $integrantesConta, null, null);
+        
+        echo $this->descricaoAdicional;
+        return new Conta($this->nomeConta, $this->descricaoAdicional, $valorTotal, null, $integrantesConta, $itens, null);
     }
 
 }

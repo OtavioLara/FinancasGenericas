@@ -1,4 +1,5 @@
 <?php
+
 class Conta {
 
     private $id;
@@ -8,15 +9,25 @@ class Conta {
     private $integrantes; //array de integrantes conta
     private $republica;
     private $data;
+    private $descricaoAdicional;
 
-    function __construct($nome, $valorTotal, $itens, $integrantes, $republica, $data, $id = -1) {
+    function __construct($nome, $descricaoAdicional, $valorTotal, $data, $integrantes = null, $itens = null, $republica = null, $id = -1) {
         $this->nome = $nome;
+        $this->descricaoAdicional = $descricaoAdicional;
         $this->valorTotal = $valorTotal;
         $this->itens = $itens;
         $this->integrantes = $integrantes;
         $this->id = $id;
         $this->republica = $republica;
         $this->data = $data;
+    }
+
+    public function getDescricaoAdicional() {
+        return $this->descricaoAdicional;
+    }
+
+    public function setDescricaoAdicional($descricaoAdicional) {
+        $this->descricaoAdicional = $descricaoAdicional;
     }
 
     public function getData() {
@@ -43,9 +54,10 @@ class Conta {
         return $this->id;
     }
 
-    public function setIntegrantes($integrantes){
+    public function setIntegrantes($integrantes) {
         $this->integrantes = $integrantes;
     }
+
     public function getIntegrantes() {
         return $this->integrantes;
     }
@@ -80,12 +92,12 @@ class Conta {
         $sugestao = array();
         if (isset($usuario)) {
             foreach ($this->integrantes as $integrante) {
-                if($integrante->precisaReceber()) {
+                if ($integrante->precisaReceber()) {
                     if ($integrante->getUsuario()->getId() != $idUsuario) {
-                        if($valor > $integrante->getValorAReceber()){
+                        if ($valor > $integrante->getValorAReceber()) {
                             $valor -= $integrante->getValorAReceber();
                             $sugestao[$integrante->getUsuario()->getNome()] = $integrante->getValorAReceber();
-                        }else{
+                        } else {
                             $sugestao[$integrante->getUsuario()->getNome()] = $valor;
                             $valor = 0;
                             break;
@@ -96,19 +108,19 @@ class Conta {
         }
         return $sugestao;
     }
-    
-    public function geraSugestaoReceber($idUsuario){
+
+    public function geraSugestaoReceber($idUsuario) {
         $usuario = $this->getIntegrante($idUsuario);
         $valor = $usuario->getValorAReceber();
         $sugestao = array();
         if (isset($usuario)) {
             foreach ($this->integrantes as $integrante) {
-                if($integrante->precisaPagar()) {
+                if ($integrante->precisaPagar()) {
                     if ($integrante->getUsuario()->getId() != $idUsuario) {
-                        if($valor > $integrante->getValorAPagar()){
+                        if ($valor > $integrante->getValorAPagar()) {
                             $valor -= $integrante->getValorAPagar();
                             $sugestao[$integrante->getUsuario()->getNome()] = $integrante->getValorAPagar();
-                        }else{
+                        } else {
                             $sugestao[$integrante->getUsuario()->getNome()] = $valor;
                             $valor = 0;
                             break;
