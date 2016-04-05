@@ -276,7 +276,7 @@ class ContaDAO extends DAO {
             $nome = $reg['Nome'];
             $valorTotal = $reg['ValorTotal'];
             $data = new DateTime($reg['Data']);
-            $descricaoAdicional = new DateTime($reg['DescricaoAdicional']);
+            $descricaoAdicional = $reg['DescricaoAdicional'];
             $conta = new Conta($nome, $descricaoAdicional, $valorTotal, $data);
             $conta->setId($idConta);
             return $conta;
