@@ -7,7 +7,7 @@ $notificacaoDAO = new NotificacaoDAO($conexao);
 $republicas = $republicaDAO->getRepublicasPorIdUsuario_Incompleto($usuario->getId());
 $convites = $republicaDAO->getConviteParaUsuario($usuario->getId());
 $requerimentos = $contaDAO->getRequerimentosDestinatario($usuario->getId(), 'L');
-$qtdNotificacoes = $notificacaoDAO->getQuantidadeNotificacoesNaoVisualizadas($usuario->getId());
+$notificacoes = $notificacaoDAO->getNotificacoes($usuario->getId(), 0, 10);
 ?>
 <a href="../../BD/ContaDAO.php"></a>
 
@@ -19,27 +19,8 @@ $qtdNotificacoes = $notificacaoDAO->getQuantidadeNotificacoesNaoVisualizadas($us
             limiteInicio = 0;
             limiteFim = 10;
             idUsuario = <?php echo $usuario->getId() . ";"; ?>
-
-            function diminui(divNotificacoes) {
-                /* Recupera valores */
-                var divQtdNotificacao = document.getElementById("qtdNotificacao");
-                var qtd = parseInt(divQtdNotificacao.innerHTML);
-                var liQtdNotificacaoNaoVisualizada = document.getElementById("qtdNotificacaoNaoVisualizadas");
-                var qtdNotificacaoNaoVisualizada = parseInt(liQtdNotificacaoNaoVisualizada.innerHTML);
-                
-                /* Retira total de notificações não visualizadas */
-                if(qtd >= qtdNotificacaoNaoVisualizada){
-                    qtd -= qtdNotificacaoNaoVisualizada;
-                }else{
-                    qtd = 0;
-                }
-                divQtdNotificacao.innerHTML = qtd;
-                
-                /* Retira última li da div notificações */
-                liQtdNotificacaoNaoVisualizada.parentNode.removeChild(liQtdNotificacaoNaoVisualizada);
-            }
             function carregaNotificacoes() {
-                var divNotificacoes = document.getElementById("notificacoes");
+                var div = document.getElementById("notificacoes");
                 var divCarregando = document.getElementById("carregandoNotificacoes");
                 divCarregando.innerHTML = "<img src='Imagens/loading.gif' />";
                 var url = "ScriptsAJAX/scriptNotificacoes.php?idUsuario=" + idUsuario +
@@ -50,8 +31,7 @@ $qtdNotificacoes = $notificacaoDAO->getQuantidadeNotificacoesNaoVisualizadas($us
                 xmlhttp.onreadystatechange = function () {
                     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                         divCarregando.innerHTML = "";
-                        divNotificacoes.innerHTML += xmlhttp.responseText;
-                        diminui(divNotificacoes);
+                        div.innerHTML += xmlhttp.responseText;
                     }
                 }
                 xmlhttp.open("GET", url, true);
@@ -61,8 +41,7 @@ $qtdNotificacoes = $notificacaoDAO->getQuantidadeNotificacoesNaoVisualizadas($us
         </script>
     </head>
     <div>
-
-        <div id="qtdNotificacao"><?php echo $qtdNotificacoes; ?> </div>
+        
         <input type="button" onclick="carregaNotificacoes()" value="notificações" />
         <div id="notificacoes">
             <div id="carregandoNotificacoes"></div>

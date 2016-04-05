@@ -8,15 +8,8 @@ if (isset($_GET['idUsuario'])) {
     $limiteFim = $_GET['limiteFim'];
     $notificacaoDAO = new NotificacaoDAO();
     $notificacoes = $notificacaoDAO->getNotificacoes($idUsuario, $limiteInicio, $limiteFim);
-    $qtdNotificacoesNaoVisualizadas = 0;
-    echo "<ul>";
     foreach ($notificacoes as $notificacao) {
-        echo "<li>".$notificacao->getMensagem() . "</li>";
-        if(!$notificacao->isVisualizada()){
-            $qtdNotificacoesNaoVisualizadas++;
-        }
+        echo $notificacao->getMensagem() . "<br/>";
     }
-    echo "<li id='qtdNotificacaoNaoVisualizadas'>".$qtdNotificacoesNaoVisualizadas . "</li>";
-    echo "</ul>";
 }
 ?>
