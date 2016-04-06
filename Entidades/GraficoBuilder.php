@@ -1,4 +1,5 @@
 <?php
+
 //Janeiro
 class GraficoBuilder {
 
@@ -8,19 +9,6 @@ class GraficoBuilder {
     function __construct() {
         $this->chave = array();
         $this->chaveOpcional = array();
-    }
-
-    function criarGraficoPorMes($dataInicio, $dataFim) {
-        $meses = array("JAN", "FEV", "MAR", "MAI", "ABR", "JUN",
-            "JUL", "AGO", "SET", "OUT", "NOV", "DEZ");
-        for($i = 0 ; $i < count($meses); $i++){
-            $this->adicionaChave($meses[$i]);
-            if($i < 10){
-                $this->adicionaChaveOptativa("0".$i, $meses[$i]);
-            }else{
-                $this->adicionaChaveOptativa("$i", $meses[$i]);
-            }
-        }
     }
 
     function adicionaChave($chave) {
@@ -41,10 +29,31 @@ class GraficoBuilder {
         }
     }
 
+    function criaChavesPorMes($dataInicio, $dataFim) {
+        $meses = array("JAN", "FEV", "MAR", "ABR", "MAI", "JUN",
+            "JUL", "AGO", "SET", "OUT", "NOV", "DEZ");
+
+        $limiteInicio = $dataInicio["month"];
+        for ($ano = $dataInicio["year"]; $ano <= $dataFim["year"]; $ano++) {
+            if ($ano == $dataFim["year"]) {
+                $limiteFim = $dataFim["month"];
+            } else {
+                $limiteFim = 12;
+            }
+            for ($mes = $limiteInicio; $mes <= $limiteFim; $mes++) {
+                $this->adicionaChave($meses[$mes - 1] . "/$ano");
+                if ($mes < 10) {
+                    $this->adicionaChaveOptativa("0" . $mes . "/" . $ano, $meses[$mes - 1] . "/$ano");
+                } else {
+                    $this->adicionaChaveOptativa($mes . "/" . $ano, $meses[$mes - 1] . "/$ano");
+                }
+            }
+            $limiteInicio = 1;
+        }
+    }
+
     function geraGrafico($tipoGrafico, $titulo, $xLabel, $yLabel, $width, $height) {
 
-
-        
         require_once('lib/inc/chartphp_dist.php');
         $p = new chartphp();
         $data = array();
@@ -55,8 +64,8 @@ class GraficoBuilder {
         }
         $p->data = array($data);
         $p->chart_type = $tipoGrafico;
-        $p->width = 250;
-        $p->height = 400;
+        $p->width = $width;
+        $p->height = $height;
 
         // Common Options 
         $p->title = $titulo;
