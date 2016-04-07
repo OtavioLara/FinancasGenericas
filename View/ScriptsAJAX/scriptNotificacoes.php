@@ -10,7 +10,7 @@ if (isset($_GET['idUsuario'])) {
     $qtdNotificacoesNaoVisualizadas = 0;
     echo "<ul>";
     foreach ($notificacoes as $notificacao) {
-        echo "<li>" . $notificacao->getMensagem() . "</li>";
+        echo "<li>" . $notificacao->getTitulo() . ": " . $notificacao->getMensagem() . "</li>";
         if (!$notificacao->isVisualizada()) {
             $qtdNotificacoesNaoVisualizadas++;
         }

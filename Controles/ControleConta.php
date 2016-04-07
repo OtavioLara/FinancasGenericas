@@ -37,7 +37,7 @@ class ControleConta extends Controle {
         /* Cria notificação da conta para os integrantes */
         $mensagem = "Conta [" . $conta->getNome() . "] foi criada no grupo " . $republica->getNome();
         foreach ($conta->getIntegrantes() as $integrante) {
-            $this->insereNotificacao($integrante->getUsuario(), $conta, $mensagem);
+            $this->insereNotificacao("Conta",$integrante->getUsuario(), $conta, $mensagem);
         }
 
         return $idConta;
@@ -61,7 +61,7 @@ class ControleConta extends Controle {
         /* Cria notificação */
         $mensagem = "Conta [" . $params["nomeAntigo"] . "] foi alterada " . $republica->getNome();
         foreach ($conta->getIntegrantes() as $integrante) {
-            $this->insereNotificacao($integrante->getUsuario(), $conta, $mensagem);
+            $this->insereNotificacao("Conta",$integrante->getUsuario(), $conta, $mensagem);
         }
         
         return $params['idConta'];
@@ -84,7 +84,7 @@ class ControleConta extends Controle {
 
         /* Cria notificação do pagamento */
         $mensagem = "Conta [" . $conta->getNome() . "] atualizada ";
-        $this->insereNotificacao($remetente, $conta, $mensagem);
+        $this->insereNotificacao("Conta",$remetente, $conta, $mensagem);
     }
 
     function atualizaDiversasContas($idRemetente, $idDestinatario, $pagamentos, $idContas, $idRequerimento = -1) {

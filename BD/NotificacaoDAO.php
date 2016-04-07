@@ -25,11 +25,12 @@ class NotificacaoDAO extends DAO {
         $id = $reg['Id'];
         $idUsuario = $reg['IdUsuario'];
         $mensagem = $reg['Mensagem'];
+        $titulo = $reg['Titulo'];
         $data = new DateTime($reg['Data']);
         $visualizada = $reg['Visualizada'];
         $objeto = $this->getObjetoNotificacao($reg);
         $usuario = $usuarioDAO->getUsuarioPorId($idUsuario);
-        return new Notificacao($usuario, $objeto, $mensagem, $data, $visualizada, $id);
+        return new Notificacao($titulo, $usuario, $objeto, $mensagem, $data, $visualizada, $id);
     }
 
     public function insereNotificacao(Notificacao $notificacao) {
@@ -41,17 +42,20 @@ class NotificacaoDAO extends DAO {
             $sql = "Insert into notificacoesrepublica(IdRepublica,";
         }
         if (isset($sql)) {
-            $mensagem = $nome = mysql_real_escape_string($notificacao->getMensagem());
-            $sql .= "IdUsuario,Mensagem,Data,Visualizada) VALUES('?1','?2','?3','?4','?5')";
+            $mensagem = mysql_real_escape_string($notificacao->getMensagem());
+            $titulo = mysql_real_escape_string($notificacao->getTitulo());
+            $sql .= "IdUsuario,Titulo, Mensagem,Data,Visualizada) VALUES('?1','?2','?3','?4','?5','?6')";
             $sql = str_replace("?1", $notificacao->getObjeto()->getId(), $sql);
             $sql = str_replace("?2", $notificacao->getUsuario()->getId(), $sql);
-            $sql = str_replace("?3", $mensagem, $sql);
-            $sql = str_replace("?4", $notificacao->getData()->format('Y-m-d H:i:s'), $sql);
+            $sql = str_replace("?3", $titulo, $sql);
+            $sql = str_replace("?4", $mensagem, $sql);
+            $sql = str_replace("?5", $notificacao->getData()->format('Y-m-d H:i:s'), $sql);
             if ($notificacao->isVisualizada()) {
-                $sql = str_replace("?5", 1, $sql);
+                $sql = str_replace("?6", 1, $sql);
             } else {
-                $sql = str_replace("?5", 0, $sql);
+                $sql = str_replace("?6", 0, $sql);
             }
+            echo $sql."<br/>";
             $this->executaSQL($sql);
         }
     }

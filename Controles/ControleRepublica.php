@@ -27,7 +27,7 @@ class ControleRepublica extends Controle {
         $mensagem = "Usuário ".$usuario->getNome()." foi removido da república "
                 . $republica->getNome().".";
         foreach($republica->getIntegrantes() as $integrante){
-            $this->insereNotificacao($integrante->getUsuario(), $republica, $mensagem);
+            $this->insereNotificacao("Republica",$integrante->getUsuario(), $republica, $mensagem);
         }
     }
     
@@ -47,7 +47,7 @@ class ControleRepublica extends Controle {
         $mensagem = "O usuário ".$usuario->getNome()." tornou-se adminstrador na "
                 . "república ".$republica->getNome();
         foreach($republica->getIntegrantes() as $integrante){
-            $this->insereNotificacao($integrante->getUsuario(), $republica, $mensagem);
+            $this->insereNotificacao("Republica",$integrante->getUsuario(), $republica, $mensagem);
         }
     }
 }

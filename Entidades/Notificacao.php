@@ -8,8 +8,10 @@ class Notificacao {
     private $mensagem;
     private $data;
     private $visualizada;
+    private $titulo;
 
-    function __construct($usuario, $objeto, $mensagem, $data, $visualizada = false, $id = -1) {
+    function __construct($titulo, $usuario, $objeto, $mensagem, $data, $visualizada = false, $id = -1) {
+        $this->titulo = $titulo;
         $this->id = $id;
         $this->usuario = $usuario;
         $this->objeto = $objeto;
@@ -18,6 +20,14 @@ class Notificacao {
         $this->visualizada = $visualizada;
     }
 
+    public function getTitulo(){
+        return $this->titulo;
+    }
+    
+    public function setTitulo($titulo){
+        $this->titulo = $titulo;
+    }
+    
     public function getId() {
         return $this->id;
     }

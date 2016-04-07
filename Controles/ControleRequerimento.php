@@ -28,7 +28,7 @@ class ControleRequerimento extends Controle {
 
         /* Cria notificação */
         $mensagem = $remetente->getNome() . " enviou um requerimento no valor de R$ " . $formato->numeroInterface($valor);
-        $this->insereNotificacao($destinatario, $requerimento, $mensagem);
+        $this->insereNotificacao("Requerimento",$destinatario, $requerimento, $mensagem);
     }
 
     function aceitaRequerimento($idRequerimento) {
@@ -44,7 +44,7 @@ class ControleRequerimento extends Controle {
         $mensagem = "Seu requerimento para " . $requerimento->getDestinatario()->getNome()
                 . " no valor de R$" . $formato->numeroInterface($requerimento->getValor())
                 . " foi aceitado";
-        $this->insereNotificacao($requerimento->getRemetente(), $requerimento, $mensagem);
+        $this->insereNotificacao("Requerimento",$requerimento->getRemetente(), $requerimento, $mensagem);
     }
 
     function rejeitaRequerimento($idRequerimento) {
@@ -60,7 +60,7 @@ class ControleRequerimento extends Controle {
         $mensagem = "Requerimento para " . $requerimento->getDestinatario()->getNome()
                 . " no valor de R$" . $formato->numeroInterface($requerimento->getValor())
                 . " foi reijeitado";
-        $this->insereNotificacao($requerimento->getRemetente(), $requerimento, $mensagem);
+        $this->insereNotificacao("Requerimento",$requerimento->getRemetente(), $requerimento, $mensagem);
     }
 
 }

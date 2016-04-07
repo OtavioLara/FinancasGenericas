@@ -22,7 +22,7 @@ class ControleConvite extends Controle{
         
         /* Cria notificação */
         $mensagem = "República ".$republica->getNome()." lhe mandou um convite.";
-        $this->insereNotificacao($usuario, $republica, $mensagem);
+        $this->insereNotificacao("Convite",$usuario, $republica, $mensagem);
     }
     
     function aceitaConvite($idConvite){
@@ -39,7 +39,7 @@ class ControleConvite extends Controle{
         $mensagem = "Usuário ".$convite->getUsuario()->getNome()." adicionado na república ". $republica->getNome().".";
         $republica->setIntegrantes($republicaDAO->getIntegrantesRepublica($republica->getId()));
         foreach($republica->getIntegrantes() as $integrante){
-            $this->insereNotificacao($integrante->getUsuario(), $republica, $mensagem);
+            $this->insereNotificacao("Convite",$integrante->getUsuario(), $republica, $mensagem);
         }
         
     }
