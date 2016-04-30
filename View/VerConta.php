@@ -256,7 +256,7 @@ if (isset($_GET['idConta'])) {
                                 </div>
                                 <div class="col-md-6">
                                     <label>Grupo:</label>
-                                    <span><?php echo $conta->getRepublica()->getNome(); ?></span>
+                                    <span><?php echo $nomeGrupo; ?></span>
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -335,6 +335,7 @@ if (isset($_GET['idConta'])) {
                                                 <th width="50%">Distribuição</th>
                                             </tr>
                                         </thead>
+                                        
                                         <tbody id="tabelaItens">
                                             <?php
                                             if (count($itens) > 0) {
@@ -380,12 +381,12 @@ if (isset($_GET['idConta'])) {
                         </div>
                     </div>
                     <!-- /. Modal Erro -->
-                    <?php if ($contaFechada) { ?>
+                    <?php //if ($contaFechada) { ?>
                         <form action='CadastroConta.php'>
                             <input type='hidden' value='<?php echo $idConta; ?>' name='idConta' />
                             <center><input type="submit" class="btn btn-default" value="Refazer conta" id='btCadastrarConta' /></center>
                         </form>
-                    <?php } ?>
+                    <?php //} ?>
                     <!-- /.container-fluid -->
                 </div>
                 <!-- /#page-wrapper -->

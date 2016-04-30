@@ -26,9 +26,9 @@ class UsuarioDAO extends DAO {
     }
 
     public function inserirUsuario(Usuario $usuario, $senha) {
-        $email = mysql_real_escape_string($usuario->getEmail());
-        $nome = mysql_real_escape_string($usuario->getNome());
-        $senha = mysql_real_escape_string($senha);
+        $email = mysqli_real_escape_string($this->conexao, $usuario->getEmail());
+        $nome = mysqli_real_escape_string($this->conexao, $usuario->getNome());
+        $senha = mysqli_real_escape_string($this->conexao, $senha);
         $sql = "Insert into usuario (Email, Nome, Senha) values ('?1','?2','?3')";
         $sql = str_replace("?1", $email, $sql);
         $sql = str_replace("?2", $nome, $sql);

@@ -40,7 +40,8 @@ class ControleConta extends Controle {
         $conta->setId($idConta);
 
         // Cria notificação da conta para os integrantes
-        $mensagem = "Conta [" . $conta->getNome() . "] foi criada no grupo " . $republica->getNome();
+        $nomeRepublica = (isset($republica)) ? $republica->getNome() : "";
+        $mensagem = "Conta [" . $conta->getNome() . "] foi criada no grupo " . $nomeRepublica;
         foreach ($conta->getIntegrantes() as $integrante) {
             if ($integrante->getUsuario()->getId() != $params['idCriador']) {
                 $this->insereNotificacao("Conta", $integrante->getUsuario(), $conta, $mensagem);
@@ -70,7 +71,8 @@ class ControleConta extends Controle {
         $contaDAO->inserirConta($conta);
 
         /* Cria notificação */
-        $mensagem = "Conta [" . $params["nomeAntigoConta"] . "] foi refeita " . $republica->getNome();
+        $nomeRepublica = (isset($republica)) ? $republica->getNome() : "";
+        $mensagem = "Conta [" . $params["nomeAntigoConta"] . "] foi refeita " . $nomeRepublica;
         foreach ($conta->getIntegrantes() as $integrante) {
             if ($integrante->getUsuario()->getId() != $params['idCriador']) {
                 $this->insereNotificacao("Conta", $integrante->getUsuario(), $conta, $mensagem);

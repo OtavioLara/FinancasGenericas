@@ -26,7 +26,7 @@ if ($comando == "inserir") {
     header('Location: ../Pagamento.php');
 } else if ($comando == "alterarConta") {
     $idConta = $controleConta->alteraConta($_POST);
-    header('Location: ../VerConta.php?id=' . $idConta);
+    header('Location: ../VerConta.php?idConta=' . $idConta);
 } else if ($comando == "usuarioRequerimento") {
     $idDestinatario = $_POST['idDestinatario'];
     $idRemetente = $_POST['idRemetente'];

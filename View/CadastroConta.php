@@ -133,7 +133,7 @@ if (isset($_GET['idConta'])) {
                     <form action="ControlesScript/ControleContaScript.php" method="post">
                         <input type='hidden' value='<?php echo $comando; ?>' name='comando' />
                         <input type='hidden' value='<?php echo $idConta; ?>' name='idConta' />
-                        <input type='hidden' value='<?php echo $nomeConta; ?>' name='nomeAntigoConta' />
+                        <input type='hidden' value="<?php echo $nomeConta; ?>" name='nomeAntigoConta' />
                         <!-- Informações da conta -->
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -145,7 +145,7 @@ if (isset($_GET['idConta'])) {
                                 <div class="row form-group">
                                     <div class="col-md-12 " >
                                         <label class="control-label" for="nomeConta">Nome conta: </label>
-                                        <input type="text" class="form-control" id="nomeConta" name="nomeConta" value='<?php echo $nomeConta; ?>'>
+                                        <input type="text" class="form-control" id="nomeConta" name="nomeConta" value="<?php echo $nomeConta; ?>" />
                                     </div>
                                 </div>
                                 <div class="row form-group">
@@ -160,14 +160,15 @@ if (isset($_GET['idConta'])) {
                                     <div class="col-md-6">
                                         <label>Grupo:</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="nomeGrupo" value='<?php echo $nomeGrupo; ?>' <?php if ($idGrupo < 0) { ?>data-toggle="modal" data-target="#modalSelecionaGrupo" <?php } ?> readonly>
+                                            <input type="text" class="form-control" id="nomeGrupo" value="<?php echo $nomeGrupo; ?>" <?php if ($idGrupo < 0) { ?>data-toggle="modal" data-target="#modalSelecionaGrupo" <?php } ?> readonly>
                                             <input type="hidden" id="idGrupo" name="idGrupo" value='<?php echo $idGrupo; ?>'/>
                                             <span class="input-group-btn">
-                                                <button class="btn btn-default" type="button"  data-toggle="modal" data-target="#modalSelecionaGrupo" <?php if ($idGrupo > 0) echo "disabled"; ?>>Selecionar grupo</button>
+                                                <button class="btn btn-default" type="button"  data-toggle="modal" data-target="#modalSelecionaGrupo" <?php if ($idGrupo >= 0) echo "disabled"; ?>>Selecionar grupo</button>
                                             </span>
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <div class="row form-group">
                                     <div class="col-md-12">
                                         <label>Informações adicionais:</label>
@@ -199,7 +200,6 @@ if (isset($_GET['idConta'])) {
                                                 <?php
                                                 foreach ($gruposMenu as $grupo) {
                                                     $idGrupo = $grupo->getId();
-
                                                     echo "<option id='grupo$idGrupo' >" . $grupo->getNome() . "</option>";
                                                 }
                                                 ?>

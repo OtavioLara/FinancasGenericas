@@ -41,8 +41,8 @@ class NotificacaoDAO extends DAO {
             $sql = "Insert into notificacoesrepublica(IdRepublica,";
         }
         if (isset($sql)) {
-            $mensagem = mysql_real_escape_string($notificacao->getMensagem());
-            $titulo = mysql_real_escape_string($notificacao->getTitulo());
+            $mensagem = mysqli_real_escape_string($this->conexao, $notificacao->getMensagem());
+            $titulo = mysqli_real_escape_string($this->conexao, $notificacao->getTitulo());
             $sql .= "IdUsuario,Titulo, Mensagem,Data,Visualizada) VALUES('?1','?2','?3','?4','?5','?6')";
             $sql = str_replace("?1", $notificacao->getObjeto()->getId(), $sql);
             $sql = str_replace("?2", $notificacao->getUsuario()->getId(), $sql);

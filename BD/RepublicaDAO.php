@@ -78,7 +78,7 @@ class RepublicaDAO extends DAO {
 
     public function inserirRepublica(Republica $republica, $idCriador) {
         /* Cria república */
-        $nomeRepublica = mysql_real_escape_string($republica->getNome());
+        $nomeRepublica = mysqli_real_escape_string($this->conexao, $republica->getNome());
         $sql = "Insert into republica (Nome) values ('?1')";
         $sql = str_replace("?1", $nomeRepublica, $sql);
         $this->executaSQL($sql);

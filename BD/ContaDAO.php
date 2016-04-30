@@ -22,7 +22,7 @@ class ContaDAO extends DAO {
         $innerJoin = "";
         if ($innerRepublica) {
             $select.= ",R.Nome as NomeRepublica, R.Id as IdRepublica ";
-            $innerJoin .= "inner join republica R on R.Id = C.IdRepublica ";
+            $innerJoin .= "left join republica R on R.Id = C.IdRepublica ";
         }
         if ($innerItem) {
             $select .= ",CI.Id as IdContaItem, CI.Nome as NomeContaItem, CI.Valor as ValorContaItem ";
@@ -63,7 +63,7 @@ class ContaDAO extends DAO {
         $data = new DateTime($reg['Data']);
         if (isset($reg["DataAlerta"])) {
             $dataAlerta = new DateTime($reg['DataAlerta']);
-        }else{
+        } else {
             $dataAlerta = null;
         }
         $conta = new Conta($nome, $dataAlerta, $descricaoAdicional, $valorTotal, $data);
@@ -121,7 +121,7 @@ class ContaDAO extends DAO {
             /* Obtem Conta */
             if (!isset($contas[$idConta])) {
                 $contas[$idConta] = $this->getAtributosConta($reg);
-                if ($innerRepublica) {
+                if ($innerRepublica && isset($reg["IdRepublica"])) {
                     $republica = $this->getAtributosRepublica($reg);
                     $contas[$idConta]->setRepublica($republica);
                 }
@@ -356,7 +356,7 @@ class ContaDAO extends DAO {
 
 
     private function geraSQLInserirContaItem($item, $idConta) {
-        $nome = mysql_real_escape_string($item->getNome());
+        $nome = mysqli_real_escape_string($this->conexao, $item->getNome());
         $sql = "";
         if ($item->getId() >= 0) {
             $sql = "Insert into contaitem (Id,IdConta, Nome, Valor) values (";
@@ -408,8 +408,8 @@ class ContaDAO extends DAO {
 
     //#Conta
     private function geraSQLInserirConta(Conta $conta) {
-        $nome = mysql_real_escape_string($conta->getNome());
-        $descricao = mysql_real_escape_string($conta->getDescricaoAdicional());
+        $nome = mysqli_real_escape_string($this->conexao, $conta->getNome());
+        $descricao = mysqli_real_escape_string($this->conexao, $conta->getDescricaoAdicional());
         $sql = "";
         if ($conta->getId() >= 1) {
             $sql = "Insert into conta (Data,Id,Nome, DescricaoAdicional, ValorTotal, IdRepublica, DataAlerta) values (";
@@ -423,7 +423,13 @@ class ContaDAO extends DAO {
         $sql = $sql . "'" . $nome . "',";
         $sql = $sql . "'" . $descricao . "',";
         $sql = $sql . "'" . $conta->getValorTotal() . "',";
-        $sql = $sql . "'" . $conta->getRepublica()->getId() . "',";
+        $republica = $conta->getRepublica();
+        if (isset($republica)) {
+            $sql = $sql . "'" . $conta->getRepublica()->getId() . "',";
+        }else{
+            $sql = $sql . "NULL,";
+        }
+
         $dataAlerta = $conta->getDataAlerta();
         if (isset($dataAlerta)) {
             $sql = $sql . "'" . $conta->getDataAlerta()->format('Y-m-d H:i:s') . "')";

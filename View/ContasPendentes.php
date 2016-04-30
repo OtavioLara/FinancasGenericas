@@ -219,7 +219,7 @@ if (count($contasPendentes) > 0) {
                                                 if (isset($republica)) {
                                                     echo "<td>" . $conta->getRepublica()->getNome() . "</td>";
                                                 } else {
-                                                    echo "<td>conta sem grupo</td>";
+                                                    echo "<td>Conta sem grupo</td>";
                                                 }
                                                 echo "</tr>";
                                             }
