@@ -228,7 +228,7 @@ if (isset($codigoGrafico)) {
                                             foreach ($contas as $conta) {
                                                 $integrante = $conta->getIntegrante($usuario->getId());
                                                 echo "<tr>";
-                                                echo "<td><a href='VerConta.php?id=" . $conta->getId() . "'>" . $conta->getNome() . "</a></td>";
+                                                echo "<td><a href='VerConta.php?idConta=" . $conta->getId() . "'>" . $conta->getNome() . "</a></td>";
                                                 echo "<td>" . $conta->getData()->format("d/m/Y H:i:s") . "</td>";
                                                 echo "<td>" . $formato->numeroInterface($integrante->getValorTotalPagar()) . "</td>";
                                                 $republica = $conta->getRepublica();

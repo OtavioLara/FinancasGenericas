@@ -182,7 +182,7 @@ $(function () {
         }
         tdDistribuicao += "</ul> </td>";
         var tr = "<tr>" + tdNome + tdValorItem + tdDistribuicao + tdBotao + "</tr>";
-        $("#tabelaItens").append(tr);
+        $("#tabelaItens").prepend(tr);
     }
 
     /* Adição de proprietário */
@@ -219,7 +219,7 @@ $(function () {
                     "   </td>" +
                     "   <td> <input type='button' class='btn btn-danger' value='Remover' onclick='removeLinha(this)' name='btRemoverProprietario' /> </td>" +
                     " </tr>";
-            $("#tabelaProprietarios").append(tr);
+            $("#tabelaProprietarios").prepend(tr);
         }
     });
 

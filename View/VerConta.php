@@ -24,7 +24,7 @@ if (isset($_GET['idConta'])) {
         } else {
             $dataAlerta = "Sem data alerta";
         }
-    }else{
+    } else {
         header('Location: Index.php');
     }
 }
@@ -85,6 +85,54 @@ if (isset($_GET['idConta'])) {
         <script src="js/menu.js"></script>
         <script>idUsuario = <?php echo $usuario->getId(); ?>;</script>
 
+        <!-- Contas -->
+        <script src='js/calculosConta.js'></script>
+
+        <script>
+            var idConta = <?php echo $conta->getId(); ?>;
+            function verificaValorAPagar(valorMax) {
+                var valor = $("#valorAAtualizar").val();
+                valor = numeroControle(valor);
+                if (!isNaN(valor)) {
+                    if (valor > valorMax) {
+                        var valor = $("#valorAAtualizar").val(valorMax);
+                    }
+                    return true;
+                } else {
+                    alert('número incorreto');
+                    return false;
+                }
+            }
+            $(function () {
+                $("#selecionaDevedor").change(function () {
+                    var valorOption = $(this).find(":selected").val().split(";");
+                    var idDevedor = valorOption[0];
+                    var nomeDevedor = valorOption[1];
+                    var valorMax = valorOption[2];
+                    if (idDevedor > 0) {
+                        var html = "<p> <font size='4'> Valor máximo que " + nomeDevedor + " pode te pagar: R$ " + numeroInterface(valorMax) + "</font></p>" +
+                                "<div class='row'> <form action='ControlesScript/ControleContaScript.php' method='post'>" +
+                                "  <input type='hidden' name='comando' value='usuarioPagando' />" +
+                                "  <input type='hidden' name='idConta' value='" + idConta + "' />" +
+                                "  <input type='hidden' name='idRecebidor' value='" + idUsuario + "' />" +
+                                "  <div class='col-md-3'>" +
+                                "    <label>Valor a atualizar:</label>" +
+                                "    <input type='text' name='valorAAtualizar' id='valorAAtualizar' class='form-control' />" +
+                                "    <input type='hidden' name='idPagador' value='" + idDevedor + "' />" +
+                                "  </div>" +
+                                "  <div class='col-md-2'>" +
+                                "    <label>&nbsp</label>" +
+                                "    <input type='submit' class='btn btn-success' value='Atualizar' onclick='return verificaValorAPagar(" + valorMax + ");' />" +
+                                "  </div>" +
+                                "</div> </form>";
+                        $("#divDevedor").html(html);
+                    } else {
+                        $("#divDevedor").html("");
+                    }
+
+                });
+            });
+        </script>
     </head>
 
     <body>
@@ -102,6 +150,86 @@ if (isset($_GET['idConta'])) {
                         <!-- /.col-lg-12 -->
                     </div>
                     <!-- /.row -->
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                Pagamento
+                            </h4>
+                        </div>
+                        <div class="panel-body">
+                            <?php
+                            echo "<ul>";
+                            $contaFechada = true;
+                            foreach ($conta->getIntegrantes() as $integrante) {
+                                echo "<li><p><font size='4'> " . $integrante->getUsuario()->getNome();
+                                if ($integrante->isDono()) {
+                                    echo " contribuiu na conta em R$ " . $formato->numeroInterface($integrante->getValorPagoConta()) . " e ";
+                                }
+
+                                if ($integrante->getValorTotalReceber() > $integrante->getValorTotalPagar()) {
+                                    echo " precisa receber: R$ " . $formato->numeroInterface($integrante->getValorAReceber()) . " de R$ " . $formato->numeroInterface($integrante->getValorTotalReceber());
+                                    $contaFechada = $contaFechada && ($integrante->getValorAReceber() > 0);
+                                } else {
+                                    echo " precisa pagar: R$ " . $formato->numeroInterface($integrante->getValorAPagar()) . " de R$ " . $formato->numeroInterface($integrante->getValorTotalPagar());
+                                    $contaFechada = $contaFechada && ($integrante->getValorAPagar() > 0);
+                                }
+                                echo "</p></font></li>";
+                            }
+                            echo "</ul>";
+                            ?>
+                            <?php
+                            if ($conta->getIntegrante($usuario->getId())->precisaReceber()) {
+                                ?>
+                                <div class='text-right'>
+                                    <input type='button' value='Atualizar Conta' class='btn btn-success' data-toggle="modal" data-target="#modalAtualizarConta" />    
+                                </div>
+                                <?php
+                            }
+                            ?>
+                        </div>
+                    </div>
+
+                    <!-- Modal Pagamento -->
+                    <div class="modal fade" id="modalAtualizarConta" tabindex="-1" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    Atualizar conta
+                                </div>
+                                <div class="modal-body ">
+                                    <div class='form-group'>
+                                        <label>Selecione um devedor: </label>
+                                        <select class='form-control' id='selecionaDevedor'>
+                                            <option value='-1;-1;-1'>Selecione um devedor</option>
+                                            <?php
+                                            $integranteUsuario = $conta->getIntegrante($usuario->getId());
+                                            foreach ($conta->getIntegrantes() as $integrante) {
+                                                if ($integrante->precisaPagar()) {
+                                                    if ($integranteUsuario->getValorAReceber() > $integrante->getValorAPagar()) {
+                                                        $valorMax = $integrante->getValorAPagar();
+                                                    } else {
+                                                        $valorMax = $integranteUsuario->getValorAReceber();
+                                                    }
+                                                    $valorOption = $integrante->getUsuario()->getId() . ";" . $integrante->getUsuario()->getNome() . ";" . $valorMax;
+                                                    $nome = $integrante->getUsuario()->getNome();
+                                                    echo "<option value='$valorOption'>" . $nome . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                        <hr/>
+                                        <div id='divDevedor'>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Sair</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./ Modal Pagamento -->
 
                     <!-- Informações da conta -->
                     <div class="panel panel-default">
@@ -252,10 +380,12 @@ if (isset($_GET['idConta'])) {
                         </div>
                     </div>
                     <!-- /. Modal Erro -->
-                    <form action='CadastroConta.php'>
-                        <input type='hidden' value='<?php echo $idConta; ?>' name='idConta' />
-                        <center><input type="submit" class="btn btn-default" value="Refazer conta" id='btCadastrarConta' /></center>
-                    </form>
+                    <?php if ($contaFechada) { ?>
+                        <form action='CadastroConta.php'>
+                            <input type='hidden' value='<?php echo $idConta; ?>' name='idConta' />
+                            <center><input type="submit" class="btn btn-default" value="Refazer conta" id='btCadastrarConta' /></center>
+                        </form>
+                    <?php } ?>
                     <!-- /.container-fluid -->
                 </div>
                 <!-- /#page-wrapper -->

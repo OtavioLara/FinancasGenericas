@@ -207,12 +207,12 @@ if (count($contasPendentes) > 0) {
                                                 $integrante = $conta->getIntegrante($usuario->getId());
                                                 $bgcolor = ($integrante->precisaReceber()) ? "#5CB85C" : "#D9534F";
                                                 echo "<tr>";
-                                                echo "<td>" . $conta->getNome() . "</td>";
+                                                echo "<td><a href='VerConta.php?idConta=" . $conta->getId() . "'>" . $conta->getNome() . "</a></td>";
                                                 echo "<td>" . $conta->getData()->format("d/m/Y H:i:s") . "</td>";
                                                 if ($integrante->precisaReceber()) {
-                                                    echo "<td>" . $formato->numeroInterface($integrante->getValorAReceber()) . "</td>";
+                                                    echo "<td> Receber " . $formato->numeroInterface($integrante->getValorAReceber()) . "</td>";
                                                 } else {
-                                                    echo "<td>" . $formato->numeroInterface($integrante->getValorAPagar()) . "</td>";
+                                                    echo "<td> Pagar ". $formato->numeroInterface($integrante->getValorAPagar()) . "</td>";
                                                 }
 
                                                 $republica = $conta->getRepublica();

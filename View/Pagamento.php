@@ -52,7 +52,7 @@ if (isset($_REQUEST['email'])) {
         </script>
     </head>
     <body onload="<?php echo $scriptJavaScript; ?>">
-        <a href="Perfil.php"> perfil </a> <br/>
+        <a href="Index.php"> perfil </a> <br/>
         <form action="Pagamento.php" method="post">
             Informe o email : <input type="text" name="email" />
             <input type="checkbox" name="requerimento" /> Requerimento de pagamento

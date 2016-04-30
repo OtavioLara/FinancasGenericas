@@ -4,29 +4,33 @@ if (isset($_GET['idConta'])) {
     $idConta = $_GET['idConta'];
     $contaDAO = new ContaDAO($conexao);
     $conta = $contaDAO->getContaCompletaPorIdConta($idConta);
-    $nomeConta = $conta->getNome();
-    $itens = $conta->getItens();
-    $integrantes = $conta->getIntegrantes();
-    $republica = $conta->getRepublica();
-    if (isset($republica)) {
-        $nomeGrupo = $conta->getRepublica()->getNome();
-        $idGrupo = $conta->getRepublica()->getId();
-        $republicaDAO = new RepublicaDAO($conexao);
-        $integrantesGrupo = $republicaDAO->getUsuariosRepublica($conta->getRepublica()->getId());
-    } else {
-        $nomeGrupo = "Sem grupo";
-        $idGrupo = 0;
-        $integrantesGrupo = array();
+    if (isset($conta) && $conta->possuiIntegrante($usuario->getId())) {
+        $nomeConta = $conta->getNome();
+        $itens = $conta->getItens();
+        $integrantes = $conta->getIntegrantes();
+        $republica = $conta->getRepublica();
+        if (isset($republica)) {
+            $nomeGrupo = $conta->getRepublica()->getNome();
+            $idGrupo = $conta->getRepublica()->getId();
+            $republicaDAO = new RepublicaDAO($conexao);
+            $integrantesGrupo = $republicaDAO->getUsuariosRepublica($conta->getRepublica()->getId());
+        } else {
+            $nomeGrupo = "Sem grupo";
+            $idGrupo = 0;
+            $integrantesGrupo = array();
+        }
+        $dataAtual = $conta->getData()->format("Y-m-d");
+        $descricaoAdicional = $conta->getDescricaoAdicional();
+        $dataAlerta = $conta->getDataAlerta();
+        if (isset($dataAlerta)) {
+            $dataAlerta = "value='" . $dataAlerta->format("Y-m-d") . "'";
+        } else {
+            $dataAlerta = "";
+        }
+        $comando = "alterarConta";
+    }else{
+        header('Location: Index.php');
     }
-    $dataAtual = $conta->getData()->format("Y-m-d");
-    $descricaoAdicional = $conta->getDescricaoAdicional();
-    $dataAlerta = $conta->getDataAlerta();
-    if (isset($dataAlerta)) {
-        $dataAlerta = "value='" . $dataAlerta->format("Y-m-d") . "'";
-    } else {
-        $dataAlerta = "";
-    }
-    $comando = "alterarConta";
 } else {
     $idConta = -1;
     $nomeConta = "";

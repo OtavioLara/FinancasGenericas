@@ -14,7 +14,7 @@ $administrador = $republicaDAO->isAdministrador($usuario->getId(), $republica->g
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <div>
-        Voltar para <a href="Perfil.php"> perfil </a> <br/>
+        Voltar para <a href="Index.php"> perfil </a> <br/>
         <a href="CadastroConta.php?id=<?php echo $republica->getId() ?>">cadastrar conta</a> <br/>
         Nome Republica: <?php echo $republica->getNome(); ?> <br/>
         Integrantes:

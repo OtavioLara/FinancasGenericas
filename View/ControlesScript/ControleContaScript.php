@@ -13,7 +13,7 @@ if ($comando == "inserir") {
     $idRemetente = $_POST['idPagador'];
     $idDestinatario = $_POST['idRecebidor'];
     $idConta = $_POST['idConta'];
-    $pagamento = $_POST['valorPago'];
+    $pagamento = $_POST['valorAAtualizar'];
     $controleConta->atualizaConta($idRemetente, $idDestinatario, $pagamento, $idConta);
     header('Location: ../VerConta.php?idConta=' . $idConta);
 } else if ($comando == "usuarioPagandoMuitasContas") {
