@@ -19,7 +19,7 @@ class RepublicaDAO extends DAO {
                 $innerJoin .= " left join usuario U on U.Id = I.IdUsuario ";
             }
         }
-        return $select . " from Republica R " . $innerJoin;
+        return $select . " from republica R " . $innerJoin;
     }
 
     function getAtributosRepublica($reg) {
@@ -221,7 +221,7 @@ class RepublicaDAO extends DAO {
     }
 
     public function getUsuariosRepublica($idRepublica) {
-        $sql = "Select U.* from integrantes I inner join Usuario U on U.Id = I.IdUsuario ".
+        $sql = "Select U.* from integrantes I inner join usuario U on U.Id = I.IdUsuario ".
                 "where I.IdRepublica='$idRepublica' order by U.Nome";
         $rs = $this->executaSQL($sql);
         $usuarios = array();

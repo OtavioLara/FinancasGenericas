@@ -44,7 +44,7 @@ class ContaDAO extends DAO {
                 $innerJoin .= "inner join usuario UI on UI.Id = IC.IdUsuario ";
             }
         }
-        return $select . " from Conta C " . $innerJoin;
+        return $select . " from conta C " . $innerJoin;
     }
 
     /* Função que obtem qualquer conta */

@@ -167,7 +167,7 @@ if (isset($_GET['idConta'])) {
                                     echo " contribuiu na conta em R$ " . $formato->numeroInterface($integrante->getValorPagoConta()) . " e ";
                                 }
 
-                                if ($integrante->getValorTotalReceber() > $integrante->getValorTotalPagar()) {
+                                if ($integrante->getValorTotalReceber() > 0) {
                                     echo " precisa receber: R$ " . $formato->numeroInterface($integrante->getValorAReceber()) . " de R$ " . $formato->numeroInterface($integrante->getValorTotalReceber());
                                     $contaFechada = $contaFechada && ($integrante->getValorAReceber() > 0);
                                 } else {
