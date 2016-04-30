@@ -59,6 +59,9 @@ $grupos = $republicaDAO->getRepublicasCompletaPorIdUsuario($usuario->getId());
         <script src="js/menu.js"></script>
         <script>idUsuario = <?php echo $usuario->getId(); ?>;</script>
 
+          <!-- Script Popup requerimento -->
+        <?php include "./RequerimentoPopup.php"; ?>
+          
         <script>
             $(function () {
                 $('#dataTableGrupos').DataTable({
@@ -139,6 +142,7 @@ $grupos = $republicaDAO->getRepublicasCompletaPorIdUsuario($usuario->getId());
     </head>
 
     <body>
+        <?php include "./RequerimentoModal.php"; ?>
         <div id="wrapper">
 
             <?php include "./menu.php"; ?>

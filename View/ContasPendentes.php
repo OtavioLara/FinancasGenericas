@@ -114,6 +114,9 @@ if (count($contasPendentes) > 0) {
         <script src="js/menu.js"></script>
         <script>idUsuario = <?php echo $usuario->getId(); ?>;</script>
 
+          <!-- Script Popup requerimento -->
+        <?php include "./RequerimentoPopup.php"; ?>
+          
         <script>
             $(function () {
 
@@ -132,6 +135,7 @@ if (count($contasPendentes) > 0) {
     </head>
 
     <body>
+        <?php include "./RequerimentoModal.php"; ?>
         <div id="wrapper">
 
             <?php include "./menu.php"; ?>

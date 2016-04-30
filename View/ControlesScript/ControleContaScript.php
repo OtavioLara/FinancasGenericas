@@ -19,7 +19,7 @@ if ($comando == "inserir") {
 } else if ($comando == "usuarioPagandoMuitasContas") {
     $idRemetente = $_POST['idUsuarioPagando'];
     $idDestinatario = $_POST['idUsuarioRecebendo'];
-    $pagamentos = $_POST['pagar'];
+    $pagamentos = $_POST['pagamentoRequerimento'];
     $idContas = $_POST['idConta'];
     $idRequerimento = $_POST['idRequerimento'];
     $controleConta->atualizaDiversasContas($idRemetente, $idDestinatario, $pagamentos, $idContas, $idRequerimento);

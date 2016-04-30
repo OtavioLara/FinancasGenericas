@@ -88,6 +88,9 @@ if (isset($_GET['idConta'])) {
         <!-- Contas -->
         <script src='js/calculosConta.js'></script>
 
+        <!-- Script Popup requerimento -->
+        <?php include "./RequerimentoPopup.php"; ?>
+
         <script>
             var idConta = <?php echo $conta->getId(); ?>;
             function verificaValorAPagar(valorMax) {
@@ -136,6 +139,7 @@ if (isset($_GET['idConta'])) {
     </head>
 
     <body>
+        <?php include "./RequerimentoModal.php"; ?>
         <div id="wrapper">
 
             <?php include "./menu.php"; ?>
@@ -335,7 +339,7 @@ if (isset($_GET['idConta'])) {
                                                 <th width="50%">Distribuição</th>
                                             </tr>
                                         </thead>
-                                        
+
                                         <tbody id="tabelaItens">
                                             <?php
                                             if (count($itens) > 0) {
@@ -382,15 +386,16 @@ if (isset($_GET['idConta'])) {
                     </div>
                     <!-- /. Modal Erro -->
                     <?php //if ($contaFechada) { ?>
-                        <form action='CadastroConta.php'>
-                            <input type='hidden' value='<?php echo $idConta; ?>' name='idConta' />
-                            <center><input type="submit" class="btn btn-default" value="Refazer conta" id='btCadastrarConta' /></center>
-                        </form>
+                    <form action='CadastroConta.php'>
+                        <input type='hidden' value='<?php echo $idConta; ?>' name='idConta' />
+                        <center><input type="submit" class="btn btn-default" value="Refazer conta" id='btCadastrarConta' /></center>
+                    </form>
                     <?php //} ?>
                     <!-- /.container-fluid -->
                 </div>
                 <!-- /#page-wrapper -->
             </div>
             <!-- /#wrapper -->
+        </div>
     </body>
 </html>

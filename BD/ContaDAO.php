@@ -236,10 +236,13 @@ class ContaDAO extends DAO {
     }
 
     public function getDividas($idReceptor, $idPagante) {
-        $where = " where IC.IdUsuario='" . $idPagante . "' "
-                . "and IC.ValorTotalPagar > IC.ValorJaPagou and C.Id in"
-                . "(Select IdConta from integranteconta where IdUsuario='" . $idReceptor . "' "
-                . " and ValorTotalReceber > ValorJaRecebido)";
+        $where = "where C.Id in" .
+                "(Select IC1.IdConta from integranteconta IC1 " .
+                "left join integranteconta IC2 on IC1.IdConta = IC2.IdConta " .
+                "where IC1.IdUsuario='$idPagante' " .
+                "and IC1.ValorTotalPagar > IC1.ValorJaPagou " .
+                "and IC2.IdUsuario='$idReceptor' and IC2.ValorTotalReceber > IC2.ValorJaRecebido " .
+                "and IC2.IdConta IS NOT NULL)";
         $contas = $this->getArrayContas($where, false, false, false, false, true, false, "dividas");
         return $contas;
     }
@@ -299,6 +302,15 @@ class ContaDAO extends DAO {
 
     public function getRequerimentoPorId($idRequerimento) {
         $sql = "Select * from requerimento where Id='$idRequerimento'";
+        $rs = $this->executaSQL($sql);
+        if ($reg = mysqli_fetch_assoc($rs)) {
+            return $this->getRequerimento($reg);
+        }
+        return null;
+    }
+
+    public function getUmRequerimentoDestinatario($idUsuario) {
+        $sql = "Select * from requerimento where IdDestinatario='$idUsuario' and Situacao='L' LIMIT 01";
         $rs = $this->executaSQL($sql);
         if ($reg = mysqli_fetch_assoc($rs)) {
             return $this->getRequerimento($reg);
@@ -426,7 +438,7 @@ class ContaDAO extends DAO {
         $republica = $conta->getRepublica();
         if (isset($republica)) {
             $sql = $sql . "'" . $conta->getRepublica()->getId() . "',";
-        }else{
+        } else {
             $sql = $sql . "NULL,";
         }
 

@@ -116,6 +116,9 @@ if (count($contas) > 0) {
         <script src="js/menu.js"></script>
         <script>idUsuario = <?php echo $usuario->getId(); ?>;</script>
 
+        <!-- Script Popup requerimento -->
+        <?php include "./RequerimentoPopup.php"; ?>
+
         <script>
             $(function () {
 
@@ -140,8 +143,8 @@ if (isset($codigoGrafico)) {
     </head>
 
     <body>
+        <?php include "./RequerimentoModal.php"; ?>
         <div id="wrapper">
-
             <?php include "./menu.php"; ?>
 
             <!-- Page Content -->

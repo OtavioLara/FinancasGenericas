@@ -50,6 +50,9 @@ $valoresDivida = $contaDAO->getValoresDividas($usuario->getId());
         <script src="js/menu.js"></script>
         <script>idUsuario = <?php echo $usuario->getId(); ?>;</script>
 
+        <!-- Script Popup requerimento -->
+        <?php include "./RequerimentoPopup.php"; ?>
+
         <script>
             $(function () {
                 var options = {
@@ -59,13 +62,16 @@ $valoresDivida = $contaDAO->getValoresDividas($usuario->getId());
                     remove: false
                 }
                 $('.item').matchHeight(options);
+                $('#modalRequerimento').modal('show');
             });
         </script>
     </head>
 
     <body>
-        <div id="wrapper">
 
+        <?php include "./RequerimentoModal.php"; ?>
+
+        <div id="wrapper">
             <?php include "./menu.php"; ?>
 
             <!-- Page Content -->
@@ -90,7 +96,7 @@ $valoresDivida = $contaDAO->getValoresDividas($usuario->getId());
                         </div>
                     </div>
                     <hr>
-                   
+
                     <div class="row">
                         <!-- Cadastrar Conta -->
                         <div class="col-md-2 col-md-offset-2">

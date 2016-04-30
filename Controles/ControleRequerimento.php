@@ -43,7 +43,7 @@ class ControleRequerimento extends Controle {
         /* Cria notificação sobre o requerimento */
         $mensagem = "Seu requerimento para " . $requerimento->getDestinatario()->getNome()
                 . " no valor de R$" . $formato->numeroInterface($requerimento->getValor())
-                . " foi aceitado";
+                . " foi aceito";
         $this->insereNotificacao("Requerimento",$requerimento->getRemetente(), $requerimento, $mensagem);
     }
 

@@ -86,20 +86,22 @@ class ControleConta extends Controle {
         $formato = new Formato();
         $pagamento = $formato->numeroControle($pagamento);
 
-        /* Recupera remetente */
+        
+        // Recupera remetente 
         $usuarioDAO = new UsuarioDAO($this->conexao);
         $remetente = $usuarioDAO->getUsuarioPorId($idRemetente);
 
-        /* Recupera conta */
+        // Recupera conta 
         $contaDAO = new ContaDAO($this->conexao);
         $conta = $contaDAO->getContaSimplesPorIdConta($idConta);
 
-        /* Atualiza pagamento no banco de dados */
+        // Atualiza pagamento no banco de dados 
         $contaDAO->atualizaPagamento($idRemetente, $idDestinatario, $pagamento, $idConta);
 
-        /* Cria notificação do pagamento */
-        $mensagem = "Conta [" . $conta->getNome() . "] atualizada foi atualiza em R$ ".$formato->numeroInterface($pagamento);
+        // Cria notificação do pagamento 
+        $mensagem = "Conta [" . $conta->getNome() . "] atualizada foi atualiza em R$ " . $formato->numeroInterface($pagamento);
         $this->insereNotificacao("Conta", $remetente, $conta, $mensagem);
+        
     }
 
     function atualizaDiversasContas($idRemetente, $idDestinatario, $pagamentos, $idContas, $idRequerimento = -1) {
@@ -112,6 +114,7 @@ class ControleConta extends Controle {
                 $this->atualizaConta($idRemetente, $idDestinatario, $pagamento, $idConta);
             }
         }
+        
         /* Caso os pagamentos foram por requerimento, cria notificação de requerimento aceito */
         if ($idRequerimento >= 0) {
             $controleRequerimento = new ControleRequerimento($this->conexao);

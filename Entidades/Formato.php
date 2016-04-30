@@ -7,8 +7,10 @@ class Formato {
     }
 
     public function numeroControle($numero) {
-        $numero = str_replace(".", "", $numero);
-        $numero = str_replace(",", ".", $numero);
+        if (!is_numeric($numero)) {
+            $numero = str_replace(".", "", $numero);
+            $numero = str_replace(",", ".", $numero);
+        }
         return $numero;
     }
 

@@ -28,7 +28,7 @@ if (isset($_GET['idConta'])) {
             $dataAlerta = "";
         }
         $comando = "alterarConta";
-    }else{
+    } else {
         header('Location: Index.php');
     }
 } else {
@@ -106,6 +106,9 @@ if (isset($_GET['idConta'])) {
         <script src='js/calculosConta.js'></script>
         <script src="js/conta.js"></script>
 
+        <!-- Script Popup requerimento -->
+        <?php include "./RequerimentoPopup.php"; ?>
+
         <script>
             var idGrupo = <?php echo $idConta; ?>;
             if (idGrupo > 0) {
@@ -115,8 +118,8 @@ if (isset($_GET['idConta'])) {
     </head>
 
     <body>
+        <?php include "./RequerimentoModal.php"; ?>
         <div id="wrapper">
-
             <?php include "./menu.php"; ?>
 
             <!-- Page Content -->
@@ -168,7 +171,7 @@ if (isset($_GET['idConta'])) {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row form-group">
                                     <div class="col-md-12">
                                         <label>Informações adicionais:</label>
@@ -467,5 +470,6 @@ if (isset($_GET['idConta'])) {
                 <!-- /#page-wrapper -->
             </div>
             <!-- /#wrapper -->
+        </div>
     </body>
 </html>
