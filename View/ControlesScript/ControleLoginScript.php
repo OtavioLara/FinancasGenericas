@@ -11,7 +11,7 @@ if (isset($conexao)) {
         session_start();
         $_SESSION['logado'] = true;
         $_SESSION['Usuario'] = base64_encode(serialize($usuario));
-        header('Location: ../Perfil.php');
+        header('Location: ../Index.php');
     } else {
         header('Location: ../Login.php?login=false');
     }

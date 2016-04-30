@@ -1,26 +1,22 @@
-<form action="../MinhaRepublica.php"
 <?php
-
 include "../../ScriptLogin.php";
 $comando = $_REQUEST['comando'];
 $controleConvite = new ControleConvite($conexao);
-
-
 if ($comando == "inserir") {
     $destinatario = $_POST['destinatario'];
     $email = $_POST['email'];
     $idRepublica = $_POST['idRepublica'];
     $controleConvite->insereConvite($idRepublica, $email, $destinatario);
-    header('Location: ../MinhaRepublica.php?id='.$idRepublica);
+    header('Location: ../MinhaRepublica.php?id=' . $idRepublica);
 } elseif ($comando == "responder") {
-    $resposta = $_GET['resposta'];
-    $idConvite = $_GET['idConvite'];
+    $resposta = $_POST["resposta"];
+    $idConvite = $_POST["idConvite"];
     if ($resposta) {
         $controleConvite->aceitaConvite($idConvite);
-    } else {
+    } else {    
         $controleConvite->rejeitaConvite($idConvite);
     }
-    header('Location: ../MinhaRepublica.php?id='.$idRepublica);
+    header('Location: ../Grupos.php');
 }
 ?>
 

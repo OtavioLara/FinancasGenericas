@@ -10,9 +10,11 @@ class Conta {
     private $republica;
     private $data;
     private $descricaoAdicional;
-
-    function __construct($nome, $descricaoAdicional, $valorTotal, $data, $integrantes = null, $itens = null, $republica = null, $id = -1) {
+    private $dataAlerta;
+    
+    function __construct($nome, $dataAlerta, $descricaoAdicional, $valorTotal, $data, $integrantes = null, $itens = null, $republica = null, $id = -1) {
         $this->nome = $nome;
+        $this->dataAlerta = $dataAlerta;
         $this->descricaoAdicional = $descricaoAdicional;
         $this->valorTotal = $valorTotal;
         $this->itens = $itens;
@@ -20,8 +22,35 @@ class Conta {
         $this->id = $id;
         $this->republica = $republica;
         $this->data = $data;
+        if (!isset($integrantes)) {
+            $this->integrantes = array();
+        }
+        if (!isset($itens)) {
+            $this->itens = array();
+        }
     }
 
+    public function getContaItem($idContaItem){
+        if(isset($this->itens[$idContaItem])){
+            return $this->itens[$idContaItem];
+        }
+        return null;
+    }
+    public function possuiIntegrante($idUsuario){
+        return isset($this->integrantes[$idUsuario]);
+    }
+    public function adicionaIntegrante(IntegrantesConta $integrante){
+        $this->integrantes[$integrante->getUsuario()->getId()] = $integrante;
+    }
+    
+    public function possuiItem($idContaItem){
+        return isset($this->itens[$idContaItem]);
+    }
+    
+    public function adicionaItem(ContaItem $contaItem){
+        $this->itens[$contaItem->getId()] = $contaItem;
+    }
+    
     public function getDescricaoAdicional() {
         return $this->descricaoAdicional;
     }
@@ -37,6 +66,15 @@ class Conta {
     public function setData($data) {
         $this->data = $data;
     }
+    
+    public function getDataAlerta() {
+        return $this->dataAlerta;
+    }
+
+    public function setDataAlerta($dataAlerta) {
+        $this->dataAlerta = $dataAlerta;
+    }
+    
 
     public function setId($id) {
         $this->id = $id;
@@ -132,4 +170,41 @@ class Conta {
         return $sugestao;
     }
 
+    
+    public function imprimeContaTeste(){
+        echo "Nome: " . $this->getNome() . "<br/>";
+        echo "Grupo: ".$this->getRepublica()->getNome()."<br/>";
+        echo "Valor total: " . $this->getValorTotal() . "<br/>";
+        echo "Data: " . $this->getData()->format("d/m/Y") . "<br/>";
+        $dataAlerta = $this->getDataAlerta();
+        if(isset($dataAlerta)){
+        echo "DataAlerta: " . $this->getDataAlerta()->format("d/m/Y") . "<br/>";    
+        }else{
+            echo "DataAlerta: <br/>";
+        }
+        echo "Integrantes: <br/>";
+        foreach ($this->getIntegrantes() as $integrante) {
+            echo $integrante->getUsuario()->getId();
+            if ($integrante->isDono()) {
+                echo " pagou na conta: " . $integrante->getValorPagoConta() ." ";
+            }
+            if ($integrante->getValorTotalReceber() > 0) {
+                echo " precisa receber: " . $integrante->getValorJaRecebido() . "/"
+                . $integrante->getValorTotalReceber() . "<br/>";
+            } else if ($integrante->getValorTotalPagar() > 0) {
+                echo " ja pagou: " . $integrante->getValorJaPagou() . "/"
+                . $integrante->getValorTotalPagar() . "<br/>";
+            }
+            echo "<br/>";
+        }
+
+        echo "Itens: <br/>";
+        foreach ($this->getItens() as $item) {
+            echo $item->getNome() . " " . $item->getValor() . "<br/>";
+            echo "Distribuição: <br/>";
+            foreach ($item->getDistribuicoes() as $distribuicao) {
+                echo $distribuicao->getUsuario()->getId() . " " . $distribuicao->getValor() . "<br/>";
+            }
+        }
+    }
 }

@@ -8,36 +8,43 @@ class ControleConta extends Controle {
 
     private function geraConta($params) {
         $contaBuilder = new ContaBuilder();
-        $contaBuilder->setContadorIntegrantes($params['contadorDistribuicao']);
-        $contaBuilder->setIdsProprietarios($params['idProp']);
-        $contaBuilder->setIdsIntegrantes($params['idDistribuicaoItem']);
+        $contaBuilder->setContadorIntegrantes($params['totalIntegrantesItem']);
+        $contaBuilder->setIdsProprietarios($params['idUsuarioProprietario']);
+        $contaBuilder->setIdsIntegrantes($params['idUsuarioItem']);
+        $contaBuilder->setIdConta($params['idConta']);
         $contaBuilder->setNomeConta($params['nomeConta']);
         $contaBuilder->setNomesItens($params['nomeItem']);
-        $contaBuilder->setValorIntegranteItens($params['valorDistribuicaoItem']);
-        $contaBuilder->setValoresProprietarios($params['valorProp']);
+        $contaBuilder->setValorIntegranteItens($params['valorPagoUsuarioItem']);
+        $contaBuilder->setValoresProprietarios($params['valorPagoProprietario']);
         $contaBuilder->setValoresItens($params['valorItem']);
         $contaBuilder->setDescricaoAdicional($params['descricaoAdicional']);
+        $contaBuilder->setDataAlerta($params["dataAlerta"]);
+        $contaBuilder->setData($params['dataConta']);
         return $contaBuilder->gerarConta();
     }
 
     function insereConta($params) {
-        /* Gera a conta de acordo com os parâmetros */
+        // Gera a conta de acordo com os parâmetros 
         $conta = $this->geraConta($params);
 
-        /* Recupera a república que a conta pertence */
+        // Recupera a república que a conta pertence
         $republicaDAO = new RepublicaDAO($this->conexao);
-        $republica = $republicaDAO->getRepublicaPorId_Incompleto($params['idRepublica']);
+        $republica = $republicaDAO->getRepublicaSimplesPorId($params['idGrupo']);
         $conta->setRepublica($republica);
 
-        /* Insere a conta no banco de dados */
+
+
+        // Insere a conta no banco de dados
         $contaDAO = new ContaDAO($this->conexao);
         $idConta = $contaDAO->inserirConta($conta);
         $conta->setId($idConta);
 
-        /* Cria notificação da conta para os integrantes */
+        // Cria notificação da conta para os integrantes
         $mensagem = "Conta [" . $conta->getNome() . "] foi criada no grupo " . $republica->getNome();
         foreach ($conta->getIntegrantes() as $integrante) {
-            $this->insereNotificacao("Conta",$integrante->getUsuario(), $conta, $mensagem);
+            if ($integrante->getUsuario()->getId() != $params['idCriador']) {
+                $this->insereNotificacao("Conta", $integrante->getUsuario(), $conta, $mensagem);
+            }
         }
 
         return $idConta;
@@ -47,23 +54,29 @@ class ControleConta extends Controle {
         /* Gera a conta de acordo com os parâmetros */
         $conta = $this->geraConta($params);
         $conta->setId($params["idConta"]);
-        $conta->setData(new DateTime($params["data"]));
+        $conta->setData(new DateTime($params["dataConta"]));
+
+
         /* Recupera a república que a conta pertence */
         $republicaDAO = new RepublicaDAO($this->conexao);
-        $republica = $republicaDAO->getRepublicaPorId_Incompleto($params['idRepublica']);
+        $republica = $republicaDAO->getRepublicaSimplesPorId($params['idGrupo']);
         $conta->setRepublica($republica);
+
+        echo $conta->imprimeContaTeste();
 
         /* Altera conta no banco de dados */
         $contaDAO = new ContaDAO($this->conexao);
         $contaDAO->deletaConta($conta->getId());
         $contaDAO->inserirConta($conta);
-        
+
         /* Cria notificação */
-        $mensagem = "Conta [" . $params["nomeAntigo"] . "] foi alterada " . $republica->getNome();
+        $mensagem = "Conta [" . $params["nomeAntigoConta"] . "] foi refeita " . $republica->getNome();
         foreach ($conta->getIntegrantes() as $integrante) {
-            $this->insereNotificacao("Conta",$integrante->getUsuario(), $conta, $mensagem);
+            if ($integrante->getUsuario()->getId() != $params['idCriador']) {
+                $this->insereNotificacao("Conta", $integrante->getUsuario(), $conta, $mensagem);
+            }
         }
-        
+
         return $params['idConta'];
     }
 
@@ -77,14 +90,14 @@ class ControleConta extends Controle {
 
         /* Recupera conta */
         $contaDAO = new ContaDAO($this->conexao);
-        $conta = $contaDAO->getContaSimples($idConta);
+        $conta = $contaDAO->getContaSimplesPorIdConta($idConta);
 
         /* Atualiza pagamento no banco de dados */
         $contaDAO->atualizaPagamento($idRemetente, $idDestinatario, $pagamento, $idConta);
 
         /* Cria notificação do pagamento */
         $mensagem = "Conta [" . $conta->getNome() . "] atualizada ";
-        $this->insereNotificacao("Conta",$remetente, $conta, $mensagem);
+        $this->insereNotificacao("Conta", $remetente, $conta, $mensagem);
     }
 
     function atualizaDiversasContas($idRemetente, $idDestinatario, $pagamentos, $idContas, $idRequerimento = -1) {
@@ -92,13 +105,15 @@ class ControleConta extends Controle {
         $formato = new Formato();
         for ($i = 0; $i < count($pagamentos); $i++) {
             $pagamento = $formato->numeroControle($pagamentos[$i]);
-            $idConta = $idContas[$i];
-            $this->atualizaConta($idRemetente, $idDestinatario, $pagamento, $idConta);
+            if ($pagamento > 0) {
+                $idConta = $idContas[$i];
+                $this->atualizaConta($idRemetente, $idDestinatario, $pagamento, $idConta);
+            }
         }
         /* Caso os pagamentos foram por requerimento, cria notificação de requerimento aceito */
         if ($idRequerimento >= 0) {
-           $controleRequerimento = new ControleRequerimento($this->conexao);
-           $controleRequerimento->aceitaRequerimento($idRequerimento);
+            $controleRequerimento = new ControleRequerimento($this->conexao);
+            $controleRequerimento->aceitaRequerimento($idRequerimento);
         }
     }
 

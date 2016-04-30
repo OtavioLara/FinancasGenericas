@@ -1,6 +1,11 @@
 function numeroControle(numString) {
-    numString = numString.replace(",", ".");
-    return parseFloat(numString);
+    if (numString == "") {
+        return NaN;
+    } else {
+        numString = numString.replace(".", "t");
+        numString = numString.replace(",", ".");
+        return Number(numString);
+    }
 }
 
 function numeroInterface(num) {
@@ -10,14 +15,15 @@ function numeroInterface(num) {
 }
 
 //16.7645345 => 16.76
-function round(valor){
-  var retorno = (valor * 100).toFixed(2);
-  var retorno = Math.floor(retorno);
-  var retorno = (retorno / 100).toFixed(2);
-  return parseFloat(retorno);
+function round(valor) {
+    var retorno = (valor * 100).toFixed(2);
+    var retorno = Math.floor(retorno);
+    var retorno = (retorno / 100).toFixed(2);
+    return parseFloat(retorno);
 }
 
 function geraDistribuicao(valor, totalPessoas, posInicial) {
+    valor = numeroControle(valor);
     var distribuicao = [];
     var divisao = valor / totalPessoas;
     divisao = round(divisao);
@@ -34,7 +40,7 @@ function geraDistribuicao(valor, totalPessoas, posInicial) {
         distribuicao[pos] = parseFloat(distribuicao[pos].toFixed(2));
         resto = parseFloat(resto.toFixed(2));
         pos++;
-    }    
+    }
     return distribuicao;
 }
 

@@ -8,14 +8,14 @@ $controleConta = new ControleConta($conexao);
 
 if ($comando == "inserir") {
     $idConta = $controleConta->insereConta($_POST);
-    header('Location: ../VerConta.php?id=' . $idConta);
+    header('Location: ../VerConta.php?idConta=' . $idConta);
 } else if ($comando == "usuarioPagando") {
     $idRemetente = $_POST['idPagador'];
     $idDestinatario = $_POST['idRecebidor'];
     $idConta = $_POST['idConta'];
     $pagamento = $_POST['valorPago'];
     $controleConta->atualizaConta($idRemetente, $idDestinatario, $pagamento, $idConta);
-    header('Location: ../VerConta.php?id=' . $idConta);
+    header('Location: ../VerConta.php?idConta=' . $idConta);
 } else if ($comando == "usuarioPagandoMuitasContas") {
     $idRemetente = $_POST['idUsuarioPagando'];
     $idDestinatario = $_POST['idUsuarioRecebendo'];
@@ -33,12 +33,12 @@ if ($comando == "inserir") {
     $valor = $_POST['valorRequerimento'];
     $requerimentoControle = new ControleRequerimento($conexao);
     $requerimentoControle->insereRequerimento($idRemetente, $idDestinatario, $valor);
-    header('Location: ../Perfil.php');
+    header('Location: ../Index.php');
 } else if ($comando == 'requerimentoRejeitado') {
     $idRequerimento = $_REQUEST['idRequerimento'];
     $requerimentoControle = new ControleRequerimento($conexao);
     $requerimentoControle->rejeitaRequerimento($idRequerimento);
-    header('Location: ../Perfil.php');
+    header('Location: ../Index.php');
 }
 ?>
 

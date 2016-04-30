@@ -2,6 +2,7 @@
 
 class ContaBuilder {
 
+    private $idConta;
     private $nomeConta; //nome da conta
     private $idsProprietarios; //ids de todos os donos
     private $valoresProprietarios; //valores de cada dono
@@ -11,12 +12,17 @@ class ContaBuilder {
     private $idsIntegrantes; //ids das distribuicoes
     private $contadorIntegrantes; //contador para saber onde cada integrante vai ficar
     private $descricaoAdicional;
+    private $dataAlerta;
+    private $data;
     private $formato;
 
     function __construct() {
         $this->formato = new Formato();
     }
 
+    public function setIdConta($idConta){
+        $this->idConta = $idConta;
+    }
     public function setNomeConta($nomeConta) {
         $this->nomeConta = $nomeConta;
     }
@@ -60,6 +66,26 @@ class ContaBuilder {
 
     public function setDescricaoAdicional($descricaoAdicional) {
         $this->descricaoAdicional = $descricaoAdicional;
+    }
+
+    public function setDataAlerta($dataAlerta) {
+        if (isset($dataAlerta) && $dataAlerta != "") {
+            $infoData = date_parse_from_format("Y-m-d", $dataAlerta);
+            $data = $infoData["year"] . "-" . $infoData["month"] . "-" . $infoData["day"];
+            $this->dataAlerta = new DateTime($data);
+        }else{
+            $this->dataAlerta = null;
+        }
+    }
+    
+    public function setData($data){
+        if (isset($data) && $data != "") {
+            $infoData = date_parse_from_format("Y-m-d", $data);
+            $data = $infoData["year"] . "-" . $infoData["month"] . "-" . $infoData["day"];
+            $this->data = new DateTime($data);
+        }else{
+            $this->data = null;
+        }
     }
 
     public function gerarConta() {
@@ -114,9 +140,7 @@ class ContaBuilder {
                 $integrante->setValores(0);
             }
         }
-        
-        echo $this->descricaoAdicional;
-        return new Conta($this->nomeConta, $this->descricaoAdicional, $valorTotal, null, $integrantesConta, $itens, null);
+        return new Conta($this->nomeConta, $this->dataAlerta, $this->descricaoAdicional, $valorTotal, $this->data, $integrantesConta, $itens, null, $this->idConta);
     }
 
 }

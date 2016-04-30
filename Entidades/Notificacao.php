@@ -1,6 +1,6 @@
 <?php
 
-class Notificacao {
+class Notificacao implements JsonSerializable {
 
     private $id;
     private $usuario;
@@ -14,20 +14,23 @@ class Notificacao {
         $this->titulo = $titulo;
         $this->id = $id;
         $this->usuario = $usuario;
+        if(!isset($objeto)){
+            echo $mensagem."<br/>";
+        }
         $this->objeto = $objeto;
         $this->mensagem = $mensagem;
         $this->data = $data;
         $this->visualizada = $visualizada;
     }
 
-    public function getTitulo(){
+    public function getTitulo() {
         return $this->titulo;
     }
-    
-    public function setTitulo($titulo){
+
+    public function setTitulo($titulo) {
         $this->titulo = $titulo;
     }
-    
+
     public function getId() {
         return $this->id;
     }
@@ -76,16 +79,28 @@ class Notificacao {
         $this->visualizada = $visualizada;
     }
 
-    public function getTipoNofitificacao(){
-        if($this->objeto instanceof Conta){
+    public function getTipoNofitificacao() {
+        if ($this->objeto instanceof Conta) {
             return "Conta";
-        }else if($this->objeto instanceof Republica){
+        } else if ($this->objeto instanceof Republica) {
             return "Republica";
-        }else if($this->objeto instanceof Requerimento){
+        } else if ($this->objeto instanceof Requerimento) {
             return "Requerimento";
         }
         return "";
     }
+
+    public function jsonSerialize() {
+        $atributos = array(
+            "titulo" => $this->titulo,
+            "mensagem" => $this->mensagem,
+            "data" => $this->data->format('d/m/Y H:i'),
+            "idObjeto" => $this->objeto->getId(),
+            "tipoObjeto" => $this->getTipoNofitificacao()
+        );
+        return json_encode($atributos);
+    }
+
 }
 
 ?>

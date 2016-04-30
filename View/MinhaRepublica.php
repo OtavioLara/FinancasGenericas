@@ -1,7 +1,7 @@
 <?php
 include "../ScriptLogin.php";
 $republicaDAO = new RepublicaDAO($conexao);
-$republica = $republicaDAO->getRepublicaPorId_Completa($_GET['id']);
+$republica = $republicaDAO->getRepublicaCompletaPorId($_GET['id']);
 if (!isset($republica)) {
     header('Location: Perfil.php');
 }

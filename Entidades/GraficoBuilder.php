@@ -22,6 +22,7 @@ class GraficoBuilder {
     }
 
     function insereValor($chave, $valor) {
+        //echo "adicionando $valor em $chave <br/>";
         if (isset($this->chave[$chave])) {
             $this->chave[$chave] += $valor;
         } elseif (isset($this->chaveOpcional[$chave])) {
@@ -33,50 +34,42 @@ class GraficoBuilder {
         $meses = array("JAN", "FEV", "MAR", "ABR", "MAI", "JUN",
             "JUL", "AGO", "SET", "OUT", "NOV", "DEZ");
 
-        $limiteInicio = $dataInicio["month"];
-        for ($ano = $dataInicio["year"]; $ano <= $dataFim["year"]; $ano++) {
-            if ($ano == $dataFim["year"]) {
-                $limiteFim = $dataFim["month"];
+        $limiteInicio = $dataInicio->format("m") + 0;
+        for ($ano = $dataInicio->format("Y"); $ano <= $dataFim->format("Y"); $ano++) {
+            if ($ano == $dataFim->format("Y")) {
+                $limiteFim = $dataFim->format("m");
             } else {
                 $limiteFim = 12;
             }
             for ($mes = $limiteInicio; $mes <= $limiteFim; $mes++) {
+                //echo "chave: " . $meses[$mes - 1] . "/$ano" . " criada <br/>";
                 $this->adicionaChave($meses[$mes - 1] . "/$ano");
-                if ($mes < 10) {
-                    $this->adicionaChaveOptativa("0" . $mes . "/" . $ano, $meses[$mes - 1] . "/$ano");
-                } else {
+                if($mes < 10){
+                    //echo "chave optativa: 0" . $mes . "/" . $ano . " criada <br/>";
+                    $this->adicionaChaveOptativa("0".$mes . "/" . $ano, $meses[$mes - 1] . "/$ano");
+                }else{
+                    //echo "chave optativa: " . $mes . "/" . $ano . " criada <br/>";
                     $this->adicionaChaveOptativa($mes . "/" . $ano, $meses[$mes - 1] . "/$ano");
                 }
+                
             }
             $limiteInicio = 1;
         }
     }
 
-    function geraGrafico($tipoGrafico, $titulo, $xLabel, $yLabel, $width, $height) {
-
-        require_once('lib/inc/chartphp_dist.php');
-        $p = new chartphp();
-        $data = array();
+    function geraGrafico($elemento) {
+        $code = "element: '$elemento'," .
+                "data: [";
         $index = 0;
-        foreach ($this->chave as $chave => $valor) {
-            $data[$index] = array($chave, $valor);
+        foreach ($this->chave as $mes => $gasto) {
+            $code .= "{mes: '$mes', gasto: $gasto}";
+            if ($index != count($this->chave) - 1) {
+                $code .= ",";
+            }
             $index++;
         }
-        $p->data = array($data);
-        $p->chart_type = $tipoGrafico;
-        $p->width = $width;
-        $p->height = $height;
-
-        // Common Options 
-        $p->title = $titulo;
-        $p->xlabel = $xLabel;
-        $p->ylabel = $yLabel;
-        $p->export = true;
-        $p->options["legend"]["show"] = true;
-        $p->series_label = array('Q1', 'Q2', 'Q3');
-        $p->color = "blue,red";
-
-        return $p->render('c1');
+        $code .= "], xkey: 'mes', ykeys: ['gasto'], labels: ['Gasto']";
+        return $code;
     }
 
 }

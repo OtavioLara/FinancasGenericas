@@ -7,21 +7,20 @@ class NotificacaoDAO extends DAO {
     }
 
     private function getObjetoNotificacao($reg) {
-        if ($reg["Tipo"] == "Conta") {
+        if ($reg["Tipo"] == "Requerimento") {
             $contaDAO = new ContaDAO($this->conexao);
             return $contaDAO->getRequerimentoPorId($reg["IdTipo"]);
-        } else if ($reg["Tipo"] == "Republica") {
+        } else if ($reg["Tipo"] == "Conta") {
             $contaDAO = new ContaDAO($this->conexao);
-            return $contaDAO->getContaSimples($reg["IdTipo"]);
-        } else if ($reg["Tipo"] == "Requerimento") {
+            return $contaDAO->getContaSimplesPorIdConta($reg["IdTipo"]);
+        } else if ($reg["Tipo"] == "Republica") {
             $republicaDAO = new RepublicaDAO($this->conexao);
-            return $republicaDAO->getRepublicaPorId_Incompleto($reg["IdTipo"]);
+            return $republicaDAO->getRepublicaSimplesPorId($reg["IdTipo"]);
         }
         return null;
     }
 
     private function getNotificacao($reg) {
-        $usuarioDAO = new UsuarioDAO($this->conexao);
         $id = $reg['Id'];
         $idUsuario = $reg['IdUsuario'];
         $mensagem = $reg['Mensagem'];
@@ -29,7 +28,7 @@ class NotificacaoDAO extends DAO {
         $data = new DateTime($reg['Data']);
         $visualizada = $reg['Visualizada'];
         $objeto = $this->getObjetoNotificacao($reg);
-        $usuario = $usuarioDAO->getUsuarioPorId($idUsuario);
+        $usuario = new Usuario($idUsuario, "", "");
         return new Notificacao($titulo, $usuario, $objeto, $mensagem, $data, $visualizada, $id);
     }
 
@@ -55,18 +54,17 @@ class NotificacaoDAO extends DAO {
             } else {
                 $sql = str_replace("?6", 0, $sql);
             }
-            echo $sql."<br/>";
             $this->executaSQL($sql);
         }
     }
 
     public function atualizaNotificacaoParaVisualizada($idNotificacao, $tipoNotificacao) {
         if ($tipoNotificacao == "Requerimento") {
-            $sql = "Update requerimento ";
+            $sql = "Update notificacoesrequerimento ";
         } else if ($tipoNotificacao == "Conta") {
-            $sql = "Update conta ";
+            $sql = "Update notificacoesconta ";
         } else if ($tipoNotificacao == "Republica") {
-            $sql = "Update republica ";
+            $sql = "Update notificacoesrepublica ";
         }
         $sql .= "set Visualizada = 1 where Id='$idNotificacao'";
         $this->executaSQL($sql);
@@ -74,6 +72,20 @@ class NotificacaoDAO extends DAO {
 
     public function getNotificacoes($idUsuario, $limiteInicio = -1, $limiteFim = -1) {
         $sql = "Select * from notificacoes where IdUsuario='$idUsuario'";
+        if ($limiteInicio >= 0 && $limiteFim >= 0) {
+            $sql .= " LIMIT $limiteInicio , $limiteFim";
+        }
+        $rs = $this->executaSQL($sql);
+        $notificacoes = array();
+        while ($reg = mysqli_fetch_assoc($rs)) {
+            $notificacao = $this->getNotificacao($reg);
+            array_push($notificacoes, $notificacao);
+        }
+        return $notificacoes;
+    }
+    
+    public function getNotificacoesNaoVisualizadas($idUsuario, $limiteInicio = -1, $limiteFim = -1) {
+        $sql = "Select * from notificacoes where IdUsuario='$idUsuario' and Visualizada = false";
         if ($limiteInicio >= 0 && $limiteFim >= 0) {
             $sql .= " LIMIT $limiteInicio , $limiteFim";
         }

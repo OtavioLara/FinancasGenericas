@@ -6,16 +6,12 @@ if (isset($_GET['idUsuario'])) {
     $limiteInicio = $_GET['limiteInicio'];
     $limiteFim = $_GET['limiteFim'];
     $notificacaoDAO = new NotificacaoDAO();
-    $notificacoes = $notificacaoDAO->getNotificacoes($idUsuario, $limiteInicio, $limiteFim);
-    $qtdNotificacoesNaoVisualizadas = 0;
-    echo "<ul>";
+    $notificacoes = $notificacaoDAO->getNotificacoesNaoVisualizadas($idUsuario, $limiteInicio, $limiteFim);
     foreach ($notificacoes as $notificacao) {
-        echo "<li>" . $notificacao->getTitulo() . ": " . $notificacao->getMensagem() . "</li>";
         if (!$notificacao->isVisualizada()) {
-            $qtdNotificacoesNaoVisualizadas++;
+            $notificacaoDAO->atualizaNotificacaoParaVisualizada($notificacao->getId(), $notificacao->getTipoNofitificacao());
         }
     }
-    echo "<li id='qtdNotificacaoNaoVisualizadas'>" . $qtdNotificacoesNaoVisualizadas . "</li>";
-    echo "</ul>";
+    echo json_encode($notificacoes);
 }
 ?>
