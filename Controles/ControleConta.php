@@ -96,7 +96,7 @@ class ControleConta extends Controle {
         $contaDAO->atualizaPagamento($idRemetente, $idDestinatario, $pagamento, $idConta);
 
         /* Cria notificação do pagamento */
-        $mensagem = "Conta [" . $conta->getNome() . "] atualizada ";
+        $mensagem = "Conta [" . $conta->getNome() . "] atualizada foi atualiza em R$ ".$formato->numeroInterface($pagamento);
         $this->insereNotificacao("Conta", $remetente, $conta, $mensagem);
     }
 
