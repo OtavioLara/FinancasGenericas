@@ -98,7 +98,7 @@ if (isset($_GET['idConta'])) {
                 valor = numeroControle(valor);
                 if (!isNaN(valor)) {
                     if (valor > valorMax) {
-                        var valor = $("#valorAAtualizar").val(valorMax);
+                        $("#valorAAtualizar").val(valorMax);
                     }
                     return true;
                 } else {

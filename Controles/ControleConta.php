@@ -72,7 +72,7 @@ class ControleConta extends Controle {
 
         /* Cria notificação */
         $nomeRepublica = (isset($republica)) ? $republica->getNome() : "";
-        $mensagem = "Conta [" . $params["nomeAntigoConta"] . "] foi refeita " . $nomeRepublica;
+        $mensagem = "Conta [" . $params["nomeAntigoConta"] . "] foi refeita no grupo " . $nomeRepublica;
         foreach ($conta->getIntegrantes() as $integrante) {
             if ($integrante->getUsuario()->getId() != $params['idCriador']) {
                 $this->insereNotificacao("Conta", $integrante->getUsuario(), $conta, $mensagem);
@@ -99,7 +99,7 @@ class ControleConta extends Controle {
         $contaDAO->atualizaPagamento($idRemetente, $idDestinatario, $pagamento, $idConta);
 
         // Cria notificação do pagamento 
-        $mensagem = "Conta [" . $conta->getNome() . "] atualizada foi atualiza em R$ " . $formato->numeroInterface($pagamento);
+        $mensagem = "Seu pagamento na conta [" . $conta->getNome() . "] no valor R$ " . $formato->numeroInterface($pagamento)." foi registrado.";
         $this->insereNotificacao("Conta", $remetente, $conta, $mensagem);
         
     }
