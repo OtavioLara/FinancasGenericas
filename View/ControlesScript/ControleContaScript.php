@@ -19,11 +19,11 @@ if ($comando == "inserir") {
 } else if ($comando == "usuarioPagandoMuitasContas") {
     $idRemetente = $_POST['idUsuarioPagando'];
     $idDestinatario = $_POST['idUsuarioRecebendo'];
-    $pagamentos = $_POST['pagamentoRequerimento'];
+    $pagamentos = $_POST['pagamento'];
     $idContas = $_POST['idConta'];
     $idRequerimento = $_POST['idRequerimento'];
     $controleConta->atualizaDiversasContas($idRemetente, $idDestinatario, $pagamentos, $idContas, $idRequerimento);
-    header('Location: ../Pagamento.php');
+    header('Location: ../Index.php');
 } else if ($comando == "alterarConta") {
     $idConta = $controleConta->alteraConta($_POST);
     header('Location: ../VerConta.php?idConta=' . $idConta);

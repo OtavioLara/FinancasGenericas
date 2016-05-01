@@ -5,29 +5,7 @@ $nomeConta = "";
 $dataInicio = "";
 $dataFim = "";
 $idGrupo = 0;
-if (isset($_GET['nomeConta'])) {
-    $nomeConta = $_GET['nomeConta'];
-    if ($_GET['dataInicio'] != "") {
-        $dataInicio = $_GET['dataInicio'] . " 00:00:00";
-    }
-    if ($_GET['dataFim'] != "") {
-        $dataFim = $_GET['dataFim'] . " 23:59:59";
-    }
-    $idGrupo = $_GET['idGrupo'];
-    $contasPendentes = $contaDAO->getContasPendentes($usuario->getId(), $nomeConta, $dataInicio, $dataFim, $idGrupo);
-
-    /* Redefine valores dos campos */
-    if ($dataInicio != "") {
-        $dataInicio = new DateTime($dataInicio);
-        $dataInicio = $dataInicio->format("Y-m-d");
-    }
-    if ($dataFim != "") {
-        $dataFim = new DateTime($dataFim);
-        $dataFim = $dataFim->format("Y-m-d");
-    }
-} else {
-    $contasPendentes = $contaDAO->getContasPendentes($usuario->getId(), null, null, null, null);
-}
+$contasPendentes = $contaDAO->getContasPendentes($usuario->getId(), null, null, null, null);
 $sugestaoPagar = array();
 $sugestaoReceber = array();
 $valorAPagar = 0;
@@ -114,9 +92,9 @@ if (count($contasPendentes) > 0) {
         <script src="js/menu.js"></script>
         <script>idUsuario = <?php echo $usuario->getId(); ?>;</script>
 
-          <!-- Script Popup requerimento -->
+        <!-- Script Popup requerimento -->
         <?php include "./RequerimentoPopup.php"; ?>
-          
+
         <script>
             $(function () {
 
@@ -150,7 +128,7 @@ if (count($contasPendentes) > 0) {
                         <!-- /.col-lg-12 -->
                     </div>
                     <!-- /.row -->
-                    
+
                     <!-- Sugestões -->
                     <div class="row">
                         <div class="col-md-4 col-md-offset-1">
@@ -183,9 +161,9 @@ if (count($contasPendentes) > 0) {
                         </div>
                     </div>
                     <!-- ./ Sugestões -->
-                    
-                    
-                    
+
+
+
                     <!-- Tabela -->
                     <div class="row">
                         <div class="panel panel-default">
@@ -216,7 +194,7 @@ if (count($contasPendentes) > 0) {
                                                 if ($integrante->precisaReceber()) {
                                                     echo "<td> Receber " . $formato->numeroInterface($integrante->getValorAReceber()) . "</td>";
                                                 } else {
-                                                    echo "<td> Pagar ". $formato->numeroInterface($integrante->getValorAPagar()) . "</td>";
+                                                    echo "<td> Pagar " . $formato->numeroInterface($integrante->getValorAPagar()) . "</td>";
                                                 }
 
                                                 $republica = $conta->getRepublica();

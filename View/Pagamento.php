@@ -44,7 +44,7 @@ if (isset($_REQUEST['email'])) {
                     valoresDividas[i] = dividas.value;
                 }
                 var distribuicao = geraSugestao(dividas, valor);
-                var pagar = document.getElementsByName("pagar[]");
+                var pagar = document.getElementsByName("pagamento[]");
                 for (var i = 0; i < pagar.length; i++) {
                     pagar[i].value = numeroInterface(distribuicao[i]);
                 }
@@ -69,7 +69,7 @@ if (isset($_REQUEST['email'])) {
             foreach ($contas as $conta) {
                 $valorAPagar = $conta->getIntegrante($usuarioInformado->getId())->getValorAPagar();
                 echo "<strong>" . $conta->getNome() . "</strong>";
-                echo "-Valor: <input type='text' name='pagar[]' size='3' value='0' $readOnly /> / " . $formato->numeroInterface($valorAPagar) . "<br/>";
+                echo "-Valor: <input type='text' name='pagamento[]' size='3' value='0' $readOnly /> / " . $formato->numeroInterface($valorAPagar) . "<br/>";
                 $dividaTotal += $conta->getIntegrante($usuarioInformado->getId())->getValorAPagar();
                 echo "<input type='hidden' name='divida[]' value='$valorAPagar' />";
                 echo "<input type='hidden' name='idConta[]' value='" . $conta->getId() . "' />";

@@ -46,19 +46,19 @@ if (isset($requerimento)) {
                                         <ul class="list-group">
                                             <?php
                                             $valorRequerimento = $requerimento->getValor();
-                                            foreach ($dividas as $conta) {
-                                                if ($conta->getIntegrante($usuario->getId())->getValorAReceber() > $valorRequerimento) {
+                                            foreach ($contasDividas as $contaDivida) {
+                                                if ($contaDivida->getIntegrante($pagante->getId())->getValorAPagar() > $valorRequerimento) {
                                                     $valorMaxConta = $valorRequerimento;
                                                     $valorRequerimento = 0;
                                                 } else {
-                                                    $valorMaxConta = $conta->getIntegrante($usuario->getId())->getValorAReceber();
+                                                    $valorMaxConta = $contaDivida->getIntegrante($pagante->getId())->getValorAPagar();
                                                     $valorRequerimento -= $valorMaxConta;
                                                 }
-                                                $divida = $formato->numeroInterface($conta->getIntegrante($usuario->getId())->getValorAReceber());
+                                                $valorDivida = $formato->numeroInterface($contaDivida->getIntegrante($pagante->getId())->getValorAPagar());
                                                 $valorMaxConta = $formato->numeroInterface($valorMaxConta);
                                                 echo "<li class='list-group-item'>";
-                                                echo $conta->getNome() . " (dívida: R$ " . $divida . "): <input type='text' name='pagamentoRequerimento[]' value='" . $valorMaxConta . "' readonly />";
-                                                echo "<input type='hidden' name='idConta[]' value='" . $conta->getId() . "' />";
+                                                echo $contaDivida->getNome() . " (dívida: R$ " . $valorDivida . "): <input type='text' name='pagamento[]' value='" . $valorMaxConta . "' readonly />";
+                                                echo "<input type='hidden' name='idConta[]' value='" . $contaDivida->getId() . "' />";
                                                 echo "</li>";
                                             }
                                             echo "<input type='hidden' name='idUsuarioPagando' value='" . $pagante->getId() . "' />";
