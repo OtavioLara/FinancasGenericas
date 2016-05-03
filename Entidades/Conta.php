@@ -125,6 +125,21 @@ class Conta {
         $this->itens = $itens;
     }
 
+    public function getDivida($idPagador, $idReceptor){
+        if($this->possuiIntegrante($idPagador) && $this->possuiIntegrante($idReceptor)){
+            $receptor = $this->getIntegrante($idReceptor);
+            $pagador = $this->getIntegrante($idPagador);
+            if($receptor->precisaReceber() && $pagador->precisaPagar()){
+                if($receptor->getValorAReceber() > $pagador->getValorAPagar()){
+                    return $pagador->getValorAPagar();
+                }else{
+                    return $receptor->getValorAReceber();
+                }
+            }
+            return 0;
+        }
+        return null;
+    }
     public function geraSugestaoPagar($idUsuario) {
         $usuario = $this->getIntegrante($idUsuario);
         $valor = $usuario->getValorAPagar();

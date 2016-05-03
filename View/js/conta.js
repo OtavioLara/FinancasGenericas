@@ -32,6 +32,7 @@ function tfValorAPagarUsuarioItemOnChange(tf) {
 
     var campoValorItem = tr.querySelectorAll("input[name='valorItem[]']")[0];
     var camposDistribuicao = ul.querySelectorAll("input[name='valorPagoUsuarioItem[]']");
+    var valorItem = numeroControle(campoValorItem.value);
     var valorTotal = 0;
     var todosSaoNumeros = true;
 
@@ -46,9 +47,9 @@ function tfValorAPagarUsuarioItemOnChange(tf) {
             valorTotal = parseFloat(valorTotal.toFixed(2));
         }
     }
-    if (todosSaoNumeros && parseFloat(campoValorItem.value) != valorTotal) {
+    
+    if (todosSaoNumeros && valorItem != valorTotal) {
         divAlerta.innerHTML = "Valores da distribuição estão errado";
-
     } else {
         divAlerta.innerHTML = "";
     }
@@ -127,6 +128,7 @@ $(function () {
         var nomeItem = $("#nomeItem").val();
         var contErros = 0;
         var msgs = [];
+
         if (nomeItem == "") {
             msgs[contErros] = "Preenche o nome do item.";
             contErros++;
@@ -155,7 +157,8 @@ $(function () {
             distribuicao[i] = objeto;
         }
         adicionaItem(nomeItem, valorItem, distribuicao);
-
+        $("#valorItem").val("");
+        $("#nomeItem").val("");
     });
 
 
@@ -209,18 +212,19 @@ $(function () {
             return false;
         }
 
-        if (idUsuario > 0) {
-            var tr = "<tr>" +
-                    "   <td>" + nomeUsuario + "</td>" +
-                    "    <input type='hidden' name='idUsuarioProprietario[]' value='" + idUsuario + "' />" +
-                    "   <td>" + emailUsuario + "</td>" +
-                    "   <td> R$ " + numeroInterface(valorPago) +
-                    "     <input type='hidden' name='valorPagoProprietario[]' value='" + numeroInterface(valorPago) + "' />" +
-                    "   </td>" +
-                    "   <td> <input type='button' class='btn btn-danger' value='Remover' onclick='removeLinha(this)' name='btRemoverProprietario' /> </td>" +
-                    " </tr>";
-            $("#tabelaProprietarios").prepend(tr);
-        }
+        var tr = "<tr>" +
+                "   <td>" + nomeUsuario + "</td>" +
+                "    <input type='hidden' name='idUsuarioProprietario[]' value='" + idUsuario + "' />" +
+                "   <td>" + emailUsuario + "</td>" +
+                "   <td> R$ " + numeroInterface(valorPago) +
+                "     <input type='hidden' name='valorPagoProprietario[]' value='" + numeroInterface(valorPago) + "' />" +
+                "   </td>" +
+                "   <td> <input type='button' class='btn btn-danger' value='Remover' onclick='removeLinha(this)' name='btRemoverProprietario' /> </td>" +
+                " </tr>";
+        $("#tabelaProprietarios").prepend(tr);
+        $("#valorPago").val("");
+        $("#selectProprietario")[0].selectedIndex = 0;
+
     });
 
     /* Seleção de Grupo */

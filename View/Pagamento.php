@@ -67,7 +67,7 @@ if (isset($_REQUEST['email'])) {
             echo "<input type='button' value='gerar' onclick='chamaGeraSugestao()' /> <br/>";
             $dividaTotal = 0;
             foreach ($contas as $conta) {
-                $valorAPagar = $conta->getIntegrante($usuarioInformado->getId())->getValorAPagar();
+                $valorAPagar = $conta->getDivida($usuarioInformado->getId(), $usuario->getId());
                 echo "<strong>" . $conta->getNome() . "</strong>";
                 echo "-Valor: <input type='text' name='pagamento[]' size='3' value='0' $readOnly /> / " . $formato->numeroInterface($valorAPagar) . "<br/>";
                 $dividaTotal += $conta->getIntegrante($usuarioInformado->getId())->getValorAPagar();
@@ -84,7 +84,7 @@ if (isset($_REQUEST['email'])) {
             echo "Contas que está devendo para: " . $usuarioInformado->getNome() . "<br/>";
             $valorTotal = 0;
             foreach ($contas as $conta) {
-                $valorAPagar = $conta->getIntegrante($usuario->getId())->getValorAPagar();
+                $valorAPagar = $conta->getDivida($usuario->getId(), $usuarioInformado->getId());
                 echo "<strong>" . $conta->getNome() . "</strong>. Valor que está devendo: " . $formato->numeroInterface($valorAPagar);
                 echo "<br/>";
                 $valorTotal += $valorAPagar;
