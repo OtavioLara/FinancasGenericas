@@ -13,7 +13,7 @@ function numeroControle(numString) {
     if (numString == "") {
         return NaN;
     } else if (!isNaN(numString)) {
-        return numString;
+        return parseFloat(numString);
     } else {
         numString = numString.replace(",", ".");
         return Number(numString);
