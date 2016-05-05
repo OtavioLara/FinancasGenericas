@@ -69,7 +69,7 @@ class RepublicaDAO extends DAO {
         $usuarioDAO = new UsuarioDAO($this->conexao);
         $id = $reg['Id'];
         $usuario = $usuarioDAO->getUsuarioPorId($reg['IdUsuario']);
-        $republica = $this->getRepublicaSimplesPorId($reg['IdRepublica']);
+        $republica = $this->getRepublicaCompletaPorId($reg["IdRepublica"]);
         $destinatario = $reg['Destinatario'];
         return new Convite($republica, $usuario, $destinatario, $id);
     }

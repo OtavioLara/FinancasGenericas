@@ -137,6 +137,7 @@ if (isset($_GET['idConta'])) {
                         <input type='hidden' value='<?php echo $comando; ?>' name='comando' />
                         <input type='hidden' value='<?php echo $idConta; ?>' name='idConta' />
                         <input type='hidden' value="<?php echo $nomeConta; ?>" name='nomeAntigoConta' />
+                        <input type='hidden' value="<?php echo $usuario->getId(); ?>" name='idCriador' />
                         <!-- Informações da conta -->
                         <div class="panel panel-default">
                             <div class="panel-heading">

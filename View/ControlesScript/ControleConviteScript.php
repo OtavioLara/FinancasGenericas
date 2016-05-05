@@ -1,4 +1,5 @@
 <?php
+
 include "../../ScriptLogin.php";
 $comando = $_REQUEST['comando'];
 $controleConvite = new ControleConvite($conexao);
@@ -8,14 +9,13 @@ if ($comando == "inserir") {
     $idRepublica = $_POST['idRepublica'];
     $controleConvite->insereConvite($idRepublica, $email, $destinatario);
     header('Location: ../MinhaRepublica.php?id=' . $idRepublica);
-} elseif ($comando == "responder") {
-    $resposta = $_POST["resposta"];
+} else if ($comando == "aceitaConvite") {
     $idConvite = $_POST["idConvite"];
-    if ($resposta) {
-        $controleConvite->aceitaConvite($idConvite);
-    } else {    
-        $controleConvite->rejeitaConvite($idConvite);
-    }
+    $controleConvite->aceitaConvite($idConvite);
+    header('Location: ../Grupos.php');
+} else if ($comando == "rejeitaConvite") {
+    $idConvite = $_POST["idConvite"];
+    $controleConvite->rejeitaConvite($idConvite);
     header('Location: ../Grupos.php');
 }
 ?>

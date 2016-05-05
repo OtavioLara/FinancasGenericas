@@ -87,14 +87,12 @@ $contasAlerta = $contaDAO->getContasAlerta($usuario->getId());
                     "</div>";
                     echo "<div class='text-right'>" .
                     "<form action='ControlesScript/ControleConviteScript.php' method='post' id='formMenuAceitaConvite'>" .
-                    "<input type='hidden' name='resposta' value='true' /> " .
                     "<input type='hidden' name='idConvite' value='$idConvite' /> " .
-                    "<input type='hidden' name='comando' value='responder' /> " .
+                    "<input type='hidden' name='comando' value='aceitaConvite' /> " .
                     "</form>" .
                     "<form action='ControlesScript/ControleConviteScript.php' method='post' id='formMenuRejeitaConvite' >" .
-                    "<inpu type='hidden' name='resposta' value='false' /> " .
                     "<input type='hidden' name='idConvite' value='$idConvite' /> " .
-                    "<input type='hidden' name='comando' value='responder' /> " .
+                    "<input type='hidden' name='comando' value='rejeitaConvite' /> " .
                     "</form>" .
                     "<input type='submit' class='btn btn-success btn-xs' value='Aceitar' form='formMenuAceitaConvite' /> " .
                     "<input type='submit' class='btn btn-danger btn-xs' value='Rejeitar' form='formMenuRejeitaConvite' />" .

@@ -36,7 +36,6 @@ class ControleConvite extends Controle {
 
         /* Cria notificação */
         $mensagem = "Usuário " . $convite->getUsuario()->getNome() . " adicionado na república " . $republica->getNome() . ".";
-        $republica->setIntegrantes($republicaDAO->getUsuariosRepublica($republica->getId()));
         foreach ($republica->getIntegrantes() as $integrante) {
             if ($integrante->getUsuario()->getId() != $convite->getUsuario()->getId()) {
                 $this->insereNotificacao("Convite", $integrante->getUsuario(), $republica, $mensagem);
@@ -49,13 +48,13 @@ class ControleConvite extends Controle {
         $republicaDAO = new RepublicaDAO($this->conexao);
         $convite = $republicaDAO->getConvitePorId($idConvite);
         $republica = $convite->getRepublica();
-        
-        /* Remove convite */
+
+
+        // Remove convite
         $republicaDAO->removeConviteDeUsuario($convite->getRepublica()->getId(), $convite->getUsuario()->getId());
-        
-        /* Cria notificação */
+
+        // Cria notificação
         $mensagem = "Usuário " . $convite->getUsuario()->getNome() . " rejeitou o convite do grupo " . $republica->getNome() . ".";
-        $republica->setIntegrantes($republicaDAO->getUsuariosRepublica($republica->getId()));
         foreach ($republica->getIntegrantes() as $integrante) {
             if ($integrante->getUsuario()->getId() != $convite->getUsuario()->getId()) {
                 $this->insereNotificacao("Convite", $integrante->getUsuario(), $republica, $mensagem);

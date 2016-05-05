@@ -182,18 +182,16 @@ $grupos = $republicaDAO->getRepublicasCompletaPorIdUsuario($usuario->getId());
                                                         /* Botão aceitar */
                                                         echo "<td>" .
                                                         "<form action='ControlesScript/ControleConviteScript.php' method='post'>" .
-                                                        "<input type='hidden' name='resposta' value='true' /> " .
                                                         "<input type='hidden' name='idConvite' value='$idConvite' /> " .
-                                                        "<input type='hidden' name='comando' value='responder' /> " .
+                                                        "<input type='hidden' name='comando' value='aceitaConvite' /> " .
                                                         "<input type='submit' class='btn btn-success btn-xs' value='Aceitar' />" .
                                                         "</form>" .
                                                         "</td>";
                                                         /* Botão rejeitar */
                                                         echo "<td>" .
                                                         "<form action='ControlesScript/ControleConviteScript.php' method='post'>" .
-                                                        "<inpu type='hidden' name='resposta' value='false' /> " .
                                                         "<input type='hidden' name='idConvite' value='$idConvite' /> " .
-                                                        "<input type='hidden' name='comando' value='responder' /> " .
+                                                        "<input type='hidden' name='comando' value='rejeitaConvite' /> " .
                                                         "<input type='submit' class='btn btn-danger btn-xs' value='Rejeitar' /> " .
                                                         "</form>" .
                                                         "</td>";
