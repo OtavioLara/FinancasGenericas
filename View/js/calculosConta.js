@@ -1,17 +1,34 @@
+Number.prototype.formatMoney = function (c, d, t) {
+    var n = this,
+            c = isNaN(c = Math.abs(c)) ? 2 : c,
+            d = d == undefined ? "." : d,
+            t = t == undefined ? "," : t,
+            s = n < 0 ? "-" : "",
+            i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
+            j = (j = i.length) > 3 ? j % 3 : 0;
+    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+};
+
 function numeroControle(numString) {
     if (numString == "") {
         return NaN;
+    } else if (!isNaN(numString)) {
+        return numString;
     } else {
-        numString = numString.replace(".", "t");
         numString = numString.replace(",", ".");
         return Number(numString);
     }
 }
 
 function numeroInterface(num) {
-    var numString = "" + num;
-    numString = numString.replace(".", ",");
-    return numString;
+    if(!isNaN(num)){
+        return Number(num).formatMoney(2,',','.');
+    }else{
+        return num;
+    }
+    //var numString = "" + num;
+    //numString = numString.replace(".", ",");
+    //return numString;
 }
 
 //16.7645345 => 16.76
@@ -23,7 +40,6 @@ function round(valor) {
 }
 
 function geraDistribuicao(valor, totalPessoas, posInicial) {
-    valor = numeroControle(valor);
     var distribuicao = [];
     var divisao = valor / totalPessoas;
     divisao = round(divisao);

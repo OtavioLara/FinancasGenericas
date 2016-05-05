@@ -7,6 +7,24 @@ function removeLinha(bt) {
 }
 
 
+function incrementaValorTotalItens(valor) {
+    var valorTotalItem = numeroControle($("#valorTotalItens").html());
+    valorTotalItem = parseFloat(valorTotalItem) + parseFloat(valor);
+    valorTotalItem = parseFloat(valorTotalItem.toFixed(2));
+    $("#valorTotalItens").html(numeroInterface(valorTotalItem));
+}
+
+function removeItem(bt) {
+    var td = bt.parentNode;
+    var tr = td.parentNode;
+    var table = tr.parentNode;
+    var campoValorItem = tr.querySelectorAll("input[name='valorItem[]']")[0];
+    var valorDecrementar = -1 * numeroControle(campoValorItem.value);
+    valorDecrementar = parseFloat(valorDecrementar.toFixed(2));
+    incrementaValorTotalItens(valorDecrementar);
+    table.removeChild(tr);
+}
+
 function somaValoresItens() {
     var soma = 0;
     $("input[name='valorItem[]']").each(function () {
@@ -47,7 +65,7 @@ function tfValorAPagarUsuarioItemOnChange(tf) {
             valorTotal = parseFloat(valorTotal.toFixed(2));
         }
     }
-    
+
     if (todosSaoNumeros && valorItem != valorTotal) {
         divAlerta.innerHTML = "Valores da distribuição estão errado";
     } else {
@@ -121,10 +139,11 @@ $(function () {
     });
 
     /* Adição de item */
+
     $("#btAdicionaItem").click(function () {
         var integrantesSelecionados = $("input:checkbox[name=integrantesItem]:checked");
 
-        var valorItem = $("#valorItem").val();
+        var valorItem = numeroControle($("#valorItem").val());
         var nomeItem = $("#nomeItem").val();
         var contErros = 0;
         var msgs = [];
@@ -133,7 +152,7 @@ $(function () {
             msgs[contErros] = "Preenche o nome do item.";
             contErros++;
         }
-        if (isNaN(numeroControle(valorItem))) {
+        if (isNaN(valorItem)) {
             msgs[contErros] = "Número errado";
             contErros++;
         }
@@ -159,13 +178,14 @@ $(function () {
         adicionaItem(nomeItem, valorItem, distribuicao);
         $("#valorItem").val("");
         $("#nomeItem").val("");
+        incrementaValorTotalItens(valorItem);
     });
 
 
     function adicionaItem(nomeItem, valorItem, distribuicao) {
         var tdNome = "<td>" + nomeItem + "<input type='hidden' value='" + nomeItem + "' name='nomeItem[]' /></td>";
-        var tdValorItem = "<td>" + numeroInterface(valorItem) + "<input type='hidden' value='" + numeroInterface(valorItem) + "' name='valorItem[]' /></td>";
-        var tdBotao = "<td><input type='button' value='Remover' class='btn btn-danger' onclick='removeLinha(this)' /></td>";
+        var tdValorItem = "<td>R$ " + numeroInterface(valorItem) + "<input type='hidden' value='" + numeroInterface(valorItem) + "' name='valorItem[]' /></td>";
+        var tdBotao = "<td><input type='button' value='Remover' class='btn btn-danger' onclick='removeItem(this)' /></td>";
         var tdDistribuicao = "<td> <div name='divAlerta[]'></div>" +
                 "<ul> " +
                 "<input type='hidden' name='totalIntegrantesItem[]' class='form-control' value='" + distribuicao.length + "' />";

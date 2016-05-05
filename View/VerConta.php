@@ -207,15 +207,10 @@ if (isset($_GET['idConta'])) {
                                         <select class='form-control' id='selecionaDevedor'>
                                             <option value='-1;-1;-1'>Selecione um devedor</option>
                                             <?php
-                                            $integranteUsuario = $conta->getIntegrante($usuario->getId());
                                             foreach ($conta->getIntegrantes() as $integrante) {
                                                 if ($integrante->precisaPagar()) {
-                                                    if ($integranteUsuario->getValorAReceber() > $integrante->getValorAPagar()) {
-                                                        $valorMax = $integrante->getValorAPagar();
-                                                    } else {
-                                                        $valorMax = $integranteUsuario->getValorAReceber();
-                                                    }
-                                                    $valorOption = $integrante->getUsuario()->getId() . ";" . $integrante->getUsuario()->getNome() . ";" . $valorMax;
+                                                    $valorDivida = $conta->getDivida($integrante->getUsuario()->getId(), $usuario->getId());
+                                                    $valorOption = $integrante->getUsuario()->getId() . ";" . $integrante->getUsuario()->getNome() . ";" . $valorDivida;
                                                     $nome = $integrante->getUsuario()->getNome();
                                                     echo "<option value='$valorOption'>" . $nome . "</option>";
                                                 }
@@ -302,10 +297,8 @@ if (isset($_GET['idConta'])) {
                                                     if ($integrante->isDono()) {
                                                         echo "<tr>" .
                                                         "   <td>" . $integrante->getUsuario()->getNome() . "</td>" .
-                                                        "    <input type='hidden' name='idUsuarioProprietario[]' value='" . $integrante->getUsuario()->getId() . "' />" .
                                                         "   <td>" . $integrante->getUsuario()->getEmail() . "</td>" .
                                                         "   <td> R$ " . $formato->numeroInterface($integrante->getValorPagoConta()) .
-                                                        "     <input type='hidden' name='valorPagoProprietario[]' value='" . $formato->numeroInterface($integrante->getValorPagoConta()) . "' />" .
                                                         "   </td>" .
                                                         " </tr>";
                                                     }

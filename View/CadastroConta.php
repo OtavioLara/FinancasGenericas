@@ -395,7 +395,14 @@ if (isset($_GET['idConta'])) {
                                     </div>
                                 </div>
                                 <!-- ./Integrantes Distribuição -->
-
+                                <br/>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <strong>Total: R$ <span id="valorTotalItens">0,00</span></strong>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <table class="table" >
