@@ -34,8 +34,8 @@ $contasAlerta = $contaDAO->getContasAlerta($usuario->getId());
             </a>
             <ul class="dropdown-menu dropdown-messages">
                 <?php
-                foreach ($contasAlerta as $conta) {
-                    $integrante = $conta->getIntegrante($usuario->getId());
+                foreach ($contasAlerta as $contaAlerta) {
+                    $integrante = $contaAlerta->getIntegrante($usuario->getId());
                     $porcentagem = ($integrante->getValorJaPagou() / $integrante->getValorTotalPagar()) * 100;
                     $porcentagem = floor($porcentagem) . "%";
                     $valorJaPagou = $formato->numeroInterface($integrante->getValorJaPagou());
@@ -44,7 +44,7 @@ $contasAlerta = $contaDAO->getContasAlerta($usuario->getId());
                     "<a href='#'> " .
                     "<div> " .
                     "<p> " .
-                    "<strong>" . $conta->getNome() . "</strong> " .
+                    "<strong>" . $contaAlerta->getNome() . "</strong> " .
                     "<span class='pull-right text-muted'>$porcentagem pago ($valorJaPagou / $valorTotalPagar)</span> " .
                     "</p> " .
                     "<div class='progress progress-striped active'> " .
