@@ -84,7 +84,8 @@ class ContaBuilder {
             $data = $infoData["year"] . "-" . $infoData["month"] . "-" . $infoData["day"];
             $this->data = new DateTime($data);
         }else{
-            $this->data = null;
+            date_default_timezone_set('America/Sao_Paulo');
+            $this->data = new DateTime(date('Y-m-d H:i:s'));
         }
     }
 

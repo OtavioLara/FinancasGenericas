@@ -424,12 +424,15 @@ class ContaDAO extends DAO {
         $descricao = mysqli_real_escape_string($this->conexao, $conta->getDescricaoAdicional());
         $sql = "";
         if ($conta->getId() >= 1) {
-            $sql = "Insert into conta (Data,Id,Nome, DescricaoAdicional, ValorTotal, IdRepublica, DataAlerta) values (";
-            $sql = $sql . "'" . $conta->getData()->format('Y-m-d H:i:s') . "',";
+            $sql = "Insert into conta (Id,Data,Nome, DescricaoAdicional, ValorTotal, IdRepublica, DataAlerta) values (";
             $sql = $sql . "'" . $conta->getId() . "',";
-        } else {
-            date_default_timezone_set('America/Sao_Paulo');
+        }else{
             $sql = "Insert into conta (Data,Nome, DescricaoAdicional, ValorTotal, IdRepublica, DataAlerta) values (";
+        }
+        $data = $conta->getData();
+        if (isset($data)) {
+            $sql = $sql . "'" . $data->format('Y-m-d H:i:s') . "',";
+        } else {
             $sql = $sql . "'" . date('Y-m-d H:i:s') . "',";
         }
         $sql = $sql . "'" . $nome . "',";
@@ -448,7 +451,6 @@ class ContaDAO extends DAO {
         } else {
             $sql = $sql . "NULL)";
         }
-
         return $sql;
     }
 

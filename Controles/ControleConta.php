@@ -55,8 +55,6 @@ class ControleConta extends Controle {
         /* Gera a conta de acordo com os parâmetros */
         $conta = $this->geraConta($params);
         $conta->setId($params["idConta"]);
-        $conta->setData(new DateTime($params["dataConta"]));
-
 
         /* Recupera a república que a conta pertence */
         $republicaDAO = new RepublicaDAO($this->conexao);
