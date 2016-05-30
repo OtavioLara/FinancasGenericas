@@ -451,6 +451,7 @@ class ContaDAO extends DAO {
         } else {
             $sql = $sql . "NULL)";
         }
+        
         return $sql;
     }
 

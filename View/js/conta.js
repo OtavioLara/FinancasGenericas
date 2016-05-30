@@ -74,6 +74,26 @@ function tfValorAPagarUsuarioItemOnChange(tf) {
 }
 
 $(function () {
+
+    $(window).keydown(function (event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
+
+    $("#valorPago").keyup(function (event) {
+        if (event.keyCode == 13) { //Enter
+            $("#btAdicionaProprietario").click();
+        }
+    });
+
+    $("#valorItem").keyup(function (event) {
+        if (event.keyCode == 13) {
+            $("#btAdicionaItem").click();
+        }
+    });
+
     /* Checkin */
     function mostraModalAlerta(msgs) {
         var msg = "<ul> ";
@@ -84,6 +104,7 @@ $(function () {
         $("#avisoModal").html(msg);
         $('#modalErroAviso').modal('show');
     }
+
     $("#btCadastrarConta").click(function () {
         var contErros = 0;
         var msgs = [];
@@ -106,7 +127,7 @@ $(function () {
             msgs[contErros] = "Insira pelo menos um item.";
             contErros++;
         } else if (somaValoresItens() != somaValoresPagosProprietario()) {
-            msgs[contErros] = "Proprietário != Total itens";
+            msgs[contErros] = "Valor total dos itens não conferem com o valor total pago pelos proprietários.";
             contErros++;
         }
 

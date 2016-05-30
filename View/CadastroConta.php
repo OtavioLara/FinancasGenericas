@@ -12,12 +12,12 @@ if (isset($_GET['idConta'])) {
         if (isset($republica)) {
             $nomeGrupo = $conta->getRepublica()->getNome();
             $idGrupo = $conta->getRepublica()->getId();
-            $republicaDAO = new RepublicaDAO($conexao);
-            $integrantesGrupo = $republicaDAO->getUsuariosRepublica($conta->getRepublica()->getId());
+            //$republicaDAO = new RepublicaDAO($conexao);
+            //$integrantesGrupo = $republicaDAO->getUsuariosRepublica($conta->getRepublica()->getId());
         } else {
             $nomeGrupo = "Sem grupo";
             $idGrupo = 0;
-            $integrantesGrupo = array();
+            //$integrantesGrupo = array();
         }
         $dataAtual = $conta->getData()->format("Y-m-d");
         $descricaoAdicional = $conta->getDescricaoAdicional();
@@ -27,6 +27,7 @@ if (isset($_GET['idConta'])) {
         } else {
             $dataAlerta = "";
         }
+        $valorTotalItens = $formato->numeroInterface($conta->getValorTotal());
         $comando = "alterarConta";
     } else {
         header('Location: Index.php');
@@ -44,6 +45,7 @@ if (isset($_GET['idConta'])) {
     $descricaoAdicional = "";
     $dataAlerta = "";
     $comando = "inserir";
+    $valorTotalItens = "0,00";
 }
 ?>
 <!DOCTYPE html>
@@ -164,10 +166,10 @@ if (isset($_GET['idConta'])) {
                                     <div class="col-md-6">
                                         <label>Grupo:</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="nomeGrupo" value="<?php echo $nomeGrupo; ?>" <?php if ($idGrupo < 0) { ?>data-toggle="modal" data-target="#modalSelecionaGrupo" <?php } ?> readonly>
+                                            <input type="text" class="form-control" id="nomeGrupo" value="<?php echo $nomeGrupo; ?>" <?php if ($idGrupo != 0) { ?>data-toggle="modal" data-target="#modalSelecionaGrupo" <?php } ?> readonly>
                                             <input type="hidden" id="idGrupo" name="idGrupo" value='<?php echo $idGrupo; ?>'/>
                                             <span class="input-group-btn">
-                                                <button class="btn btn-default" type="button"  data-toggle="modal" data-target="#modalSelecionaGrupo" <?php if ($idGrupo >= 0) echo "disabled"; ?>>Selecionar grupo</button>
+                                                <button class="btn btn-default" type="button"  data-toggle="modal" data-target="#modalSelecionaGrupo" <?php if ($idGrupo == 0) echo "disabled"; ?>>Selecionar grupo</button>
                                             </span>
                                         </div>
                                     </div>
@@ -333,7 +335,8 @@ if (isset($_GET['idConta'])) {
                                         <div class='form-group' id="integrantesGrupo0">
                                             <?php
                                             $index = 0;
-                                            foreach ($integrantesGrupo as $usuario) {
+                                            foreach ($integrantes as $integranteConta) {
+                                                $usuario = $integranteConta->getUsuario();
                                                 $value = $usuario->getId() . ";" . $usuario->getNome() . ";" . $usuario->getEmail();
                                                 if ($index % 4 == 0) {
                                                     echo "<div class='col-md-12'> " .
@@ -349,7 +352,8 @@ if (isset($_GET['idConta'])) {
                                         <div class='form-group' id="integrantesGrupo1">
                                             <?php
                                             $index = 0;
-                                            foreach ($integrantesGrupo as $usuario) {
+                                            foreach ($integrantes as $integranteConta) {
+                                                $usuario = $integranteConta->getUsuario();
                                                 $value = $usuario->getId() . ";" . $usuario->getNome() . ";" . $usuario->getEmail();
                                                 if ($index % 4 == 1) {
                                                     echo "<div class='col-md-12'> " .
@@ -365,7 +369,8 @@ if (isset($_GET['idConta'])) {
                                         <div class='form-group' id="integrantesGrupo2">
                                             <?php
                                             $index = 0;
-                                            foreach ($integrantesGrupo as $usuario) {
+                                            foreach ($integrantes as $integranteConta) {
+                                                $usuario = $integranteConta->getUsuario();
                                                 $value = $usuario->getId() . ";" . $usuario->getNome() . ";" . $usuario->getEmail();
                                                 if ($index % 4 == 2) {
                                                     echo "<div class='col-md-12'> " .
@@ -381,7 +386,8 @@ if (isset($_GET['idConta'])) {
                                         <div class='form-group' id="integrantesGrupo3">
                                             <?php
                                             $index = 0;
-                                            foreach ($integrantesGrupo as $usuario) {
+                                            foreach ($integrantes as $integranteConta) {
+                                                $usuario = $integranteConta->getUsuario();
                                                 $value = $usuario->getId() . ";" . $usuario->getNome() . ";" . $usuario->getEmail();
                                                 if ($index % 4 == 3) {
                                                     echo "<div class='col-md-12'> " .
@@ -399,7 +405,7 @@ if (isset($_GET['idConta'])) {
                                 <div class="row">
                                     <div class="form-group">
                                         <div class="col-md-12">
-                                            <strong>Total: R$ <span id="valorTotalItens">0,00</span></strong>
+                                            <strong>Total: R$ <span id="valorTotalItens"><?php echo $valorTotalItens; ?></span></strong>
                                         </div>
                                     </div>
                                 </div>
@@ -439,7 +445,7 @@ if (isset($_GET['idConta'])) {
                                                             "</li>";
                                                         }
                                                         echo "</ul> </td>";
-                                                        echo "<td><input type='button' value='Remover' class='btn btn-danger' onclick='removeLinha(this)' /></td>";
+                                                        echo "<td><input type='button' value='Remover' class='btn btn-danger' onclick='removeItem(this)' /></td>";
                                                         echo "</tr>";
                                                     }
                                                 }
